@@ -1,4 +1,4 @@
-package com.google.assigner_mobile;
+package com.google.assigner_mobile.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.assigner_mobile.R;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
     EditText    loginUsernameEditText,

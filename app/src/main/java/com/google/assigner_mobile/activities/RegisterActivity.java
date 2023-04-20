@@ -1,4 +1,4 @@
-package com.google.assigner_mobile;
+package com.google.assigner_mobile.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.assigner_mobile.R;
+import com.google.assigner_mobile.activities.LoginActivity;
+import com.google.assigner_mobile.helpers.UserHelper;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -18,6 +23,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     Button      registerSubmitButton;
     TextView    registerDirectToLoginTextView;
+
+    UserHelper userDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +41,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         registerSubmitButton.setOnClickListener(this);
         registerDirectToLoginTextView.setOnClickListener(this);
+
+        userDB = new UserHelper(this);
     }
 
     @Override
     public void onClick(View view) {
         Intent intent;
+
+        String  username = registerUsernameEditText.getText().toString(),
+                password = registerPasswordEditText.getText().toString(),
+                email = registerEmailEditText.getText().toString(),
+                phoneNumber = registerPhoneNumberEditText.getText().toString();
 
         if(view == registerDirectToLoginTextView) {
             intent = new Intent(this, LoginActivity.class);
@@ -46,15 +60,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if(view == registerSubmitButton) {
-            // Open Database
-
             if(!validateFormInput())
                 return;
 
-            // Insert Data to Database
+            userDB.open();
+            userDB.insert(username, password, email, phoneNumber);
+            userDB.close();
 
-            // Close Database
-
+            Toast.makeText(this, "Register success", Toast.LENGTH_SHORT).show();
+            intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
             finish();
         }
     }
@@ -90,6 +105,41 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
 
+        if(!registerEmailEditText.getText().toString().matches("^[a-zA-Z\\d+_.-]+@[a-zA-Z\\d.-]+.com$")) {
+            registerEmailEditText.setError("Email is not valid");
+            registerEmailEditText.requestFocus();
+            return false;
+        }
+
+        if(!registerPhoneNumberEditText.getText().toString().matches("^0[\\d]{5,10}+$")) {
+            registerPhoneNumberEditText.setError("Phone number is not valid");
+            registerPhoneNumberEditText.requestFocus();
+            return false;
+        }
+
+
+        userDB.open();
+        if(userDB.isUserExists("email", registerEmailEditText.getText().toString())) {
+            registerEmailEditText.setError("Email already exists");
+            registerEmailEditText.requestFocus();
+            userDB.close();
+            return false;
+        }
+
+        if(userDB.isUserExists("username", registerUsernameEditText.getText().toString())) {
+            registerUsernameEditText.setError("Username already exists");
+            registerUsernameEditText.requestFocus();
+            userDB.close();
+            return false;
+        }
+
+        if(userDB.isUserExists("phone_number", registerPhoneNumberEditText.getText().toString())) {
+            registerPhoneNumberEditText.setError("Phone number already exists");
+            registerPhoneNumberEditText.requestFocus();
+            userDB.close();
+            return false;
+        }
+        userDB.close();
         return true;
     }
 }
