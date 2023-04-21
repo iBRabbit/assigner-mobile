@@ -3,6 +3,7 @@ package com.google.assigner_mobile.helpers.seeders;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.assigner_mobile.functions.GlobalFunction;
 import com.google.assigner_mobile.helpers.AssignmentHelper;
 import com.google.assigner_mobile.helpers.DatabaseHelper;
 import com.google.assigner_mobile.helpers.UserHelper;
@@ -23,7 +24,7 @@ public class DatabaseSeeder {
 
     DatabaseHelper dbh;
 
-    Random rand = new Random();
+    GlobalFunction rand = new GlobalFunction();
 
     /**
      * Fungsi untuk generate dummy data assignment
@@ -70,12 +71,12 @@ public class DatabaseSeeder {
         int i = 0;
         for(i = 0; i < seedSize; i++)
             asgDB.insert(
-                    rand.nextInt(userIdUpperBound - userIdLowerBound) + userIdLowerBound,
+                    rand.randIntWithRange(userIdLowerBound, userIdUpperBound),
                     1,
                     "Assignment " + i,
                     "This is assignment " + i,
                     LocalDate.now(),
-                    LocalDate.of(2023, LocalDate.now().getMonthValue(), rand.nextInt(30 - LocalDate.now().getDayOfMonth()) + LocalDate.now().getDayOfMonth())
+                    LocalDate.of(2023, LocalDate.now().getMonthValue(), rand.randIntWithRange(LocalDate.now().getDayOfMonth() - 3,28))
             );
 
         Log.d("DatabaseSeeder", String.format("Assignment Seeder : Successfully seeded %d assignments", i));
