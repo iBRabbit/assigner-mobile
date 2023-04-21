@@ -15,7 +15,7 @@ public class UserHelper {
     private DatabaseHelper dbh;
     private final Context context;
 
-    public GlobalFunction func;
+    public GlobalFunction func = new GlobalFunction();
 
     public UserHelper(Context context) {
         this.context = context;
@@ -97,7 +97,6 @@ public class UserHelper {
      */
     public Boolean auth(String username, String password) {
 
-        // Pastikan username dan password tidak mengandung karakter injection //
         if(func.hasInjection(username) || func.hasInjection(password))
             return false;
 
