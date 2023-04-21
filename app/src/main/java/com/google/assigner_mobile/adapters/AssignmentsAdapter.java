@@ -40,11 +40,14 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
     @Override
     public void onBindViewHolder(@NonNull AssignmentsAdapter.AssignmentViewHolder holder, int position) {
 
+        // Assignment Name Textview
         holder.assignmentNameTextView.setText(assignmentVector.get(position).getName());
 
-        // Dari ID, harus diconvert ke dalam bentuk object group dulu.
+        // Group Text View //
+        // TODO: Pas group udah kelar, jangan lupa buat ganti ini menjadi nama grup (get dari object group).
         holder.assignmentGroupTextView.setText(assignmentVector.get(position).getGroupId().toString());
 
+        // Deadline Text View //
         holder.assignmentDeadlineTextView.setTextColor(
                 assignmentVector
                         .get(position)
