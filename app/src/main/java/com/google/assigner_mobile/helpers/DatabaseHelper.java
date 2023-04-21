@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param query Query yang akan dijalankan
      */
 
-    public void query(String query) {
+    public void execQuery(String query) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             db.execSQL(query);
@@ -80,18 +80,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Fungsi untuk mengambil data tipe String dari database (Bisa tunggal maupun majemuk)
      * Merupakan fungsi overload dari fungsi getData(String dataType, Integer num, String tableName)
-     * @param columName Column bertipe String yang akan diambil
+     * @param columnName Column bertipe String yang akan diambil
      * @param str Nilai String yang akan diambil
      * @param tableName Nama tabel yang akan diambil
      * @return Cursor Mengembalikan cursor yang berisi data yang diambil
      */
 
-    public Cursor getData(String columName, String str, String tableName) {
+    public Cursor getData(String columnName, String str, String tableName) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
 
         try {
-            String query = String.format("SELECT * FROM %s WHERE %s = '%s'", tableName, columName, str);
+            String query = String.format("SELECT * FROM %s WHERE %s = '%s'", tableName, columnName, str);
             cursor = db.rawQuery(query, null);
         } catch (Exception e){
             Log.e("UserTable: ", String.format("getData: %s", e.getMessage()));

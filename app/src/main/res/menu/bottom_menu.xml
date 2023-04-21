@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/assignments"
+        android:icon="@drawable/assignment_icon"
+        android:title="Assignments"/>
+
+    <item android:id="@+id/groups"
+        android:icon="@drawable/groups_icon"
+        android:title="Groups"/>
+
+    <item android:id="@+id/notifications"
+        android:icon="@drawable/notifications_icon"
+        android:title="Notifications"/>
+
+    <item android:id="@+id/profile"
+        android:icon="@drawable/profile_icon"
+        android:title="My Profile"/>
+
+</menu>
