@@ -78,17 +78,25 @@ public class UserHelper {
      * @param phoneNumber Nomor telepon yang akan di insert
      * @param email Email yang akan di insert
      */
-    public void insert(String username, String password, String email, String phoneNumber) {
+    public Boolean insert(String username, String password, String email, String phoneNumber) {
         SQLiteDatabase database = dbh.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("username", username);
-        values.put("password", password);
-        values.put("phone_number", phoneNumber);
-        values.put("email", email);
 
-        database.insert(TABLE_NAME, null, values);
+        try {
+            values.put("username", username);
+            values.put("password", password);
+            values.put("phone_number", phoneNumber);
+            values.put("email", email);
+
+            database.insert(TABLE_NAME, null, values);
+        } catch (Exception e) {
+            Log.e("UserTable: ", String.format("Error in insert: %s", e.getMessage()));
+            return false;
+        }
+
         Log.d("UserTable: ", String.format("insert: Data %s [id: %d] has been inserted into %s", username, getIDByUsername(username) ,TABLE_NAME));
+        return true;
     }
 
     /**

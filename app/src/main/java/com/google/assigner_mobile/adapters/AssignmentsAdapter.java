@@ -11,7 +11,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.assigner_mobile.R;
+import com.google.assigner_mobile.helpers.GroupHelper;
 import com.google.assigner_mobile.models.Assignment;
+import com.google.assigner_mobile.models.Group;
 
 import java.util.Vector;
 
@@ -44,8 +46,14 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
         holder.assignmentNameTextView.setText(assignmentVector.get(position).getName());
 
         // Group Text View //
-        // TODO: Pas group udah kelar, jangan lupa buat ganti ini menjadi nama grup (get dari object group).
-        holder.assignmentGroupTextView.setText(assignmentVector.get(position).getGroupId().toString());
+        GroupHelper groupDB = new GroupHelper(context);
+        holder.assignmentGroupTextView.setText(
+                groupDB.getGroupById(
+                        assignmentVector
+                                .get(position)
+                                .getGroupId()
+                ).getName()
+        );
 
         // Deadline Text View //
         holder.assignmentDeadlineTextView.setTextColor(

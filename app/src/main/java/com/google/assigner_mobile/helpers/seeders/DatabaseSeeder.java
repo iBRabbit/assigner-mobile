@@ -6,8 +6,10 @@ import android.util.Log;
 import com.google.assigner_mobile.functions.GlobalFunction;
 import com.google.assigner_mobile.helpers.AssignmentHelper;
 import com.google.assigner_mobile.helpers.DatabaseHelper;
+import com.google.assigner_mobile.helpers.GroupHelper;
 import com.google.assigner_mobile.helpers.UserHelper;
 import com.google.assigner_mobile.models.Assignment;
+import com.google.assigner_mobile.models.Group;
 import com.google.assigner_mobile.models.User;
 
 import java.sql.SQLException;
@@ -21,10 +23,12 @@ public class DatabaseSeeder {
 
     AssignmentHelper asgDB;
     UserHelper userDB;
+    GroupHelper groupDB;
 
     DatabaseHelper dbh;
 
     GlobalFunction rand = new GlobalFunction();
+
 
     /**
      * Fungsi untuk generate dummy data assignment
@@ -47,6 +51,30 @@ public class DatabaseSeeder {
         return dummyDataVector;
     }
 
+    public void seedGroups(Context context, int seedSize) {
+        groupDB = new GroupHelper(context);
+
+        groupDB.open();
+
+        userDB.open();
+        Vector <User> userVector = userDB.getAllData();
+        int    userIdLowerBound = userVector.get(0).getId(),
+                userIdUpperBound = userVector.get(userVector.size() - 1).getId();
+        userDB.close();
+
+        int i = 0;
+        for(i = 0; i < seedSize; i++)
+            groupDB.insert(
+                    "Group " + i,
+                    "This is group " + i,
+                    rand.randIntWithRange(userIdLowerBound, userIdUpperBound)
+            );
+
+        Log.d("DatabaseSeeder", String.format("Group Seeder : Successfully seeded %d groups", i));
+
+        groupDB.close();
+    }
+
     /**
      * Fungsi untuk generate dummy data assignment ke database
      * @param context Context
@@ -55,9 +83,6 @@ public class DatabaseSeeder {
     public void seedAssignments(Context context, int seedSize)  {
         asgDB = new AssignmentHelper(context);
         asgDB.open();
-
-        dbh = new DatabaseHelper(context);
-        dbh.execQuery("DELETE FROM assignments");
 
         userDB = new UserHelper(context);
         userDB.open();
@@ -68,11 +93,19 @@ public class DatabaseSeeder {
 
         userDB.close();
 
+        groupDB = new GroupHelper(context);
+        groupDB.open();
+
+        Vector <Group> groupVector = groupDB.getAllData();
+        int     groupIdLowerBound = groupVector.get(0).getId(),
+                groupIdUpperBound = groupVector.get(groupVector.size() - 1).getId() ;
+
+        groupDB.close();
         int i = 0;
         for(i = 0; i < seedSize; i++)
             asgDB.insert(
                     rand.randIntWithRange(userIdLowerBound, userIdUpperBound),
-                    1,
+                    rand.randIntWithRange(groupIdLowerBound, groupIdUpperBound),
                     "Assignment " + i,
                     "This is assignment " + i,
                     LocalDate.now(),
@@ -93,10 +126,6 @@ public class DatabaseSeeder {
 
         userDB = new UserHelper(context);
         userDB.open();
-
-
-        dbh = new DatabaseHelper(context);
-        dbh.execQuery("DELETE FROM users");
 
         userDB.insert(
                 "admin",
@@ -120,12 +149,22 @@ public class DatabaseSeeder {
        Log.d("DatabaseSeeder", String.format("User Seeder : Successfully seeded %d users", i));
     }
 
+
+    public void seedFresh(Context context) throws SQLException{
+        dbh.execQuery("DELETE FROM users");
+        dbh.execQuery("DELETE FROM assignments");
+        dbh.execQuery("DELETE FROM groups");
+
+        seed(context);
+    }
+
     /**
      * Fungsi untuk generate dummy data ke database
      * @param context Context
      */
     public void seed(Context context) throws SQLException {
         seedUsers(context, 3);
+        seedGroups(context, 10);
         seedAssignments(context, 20);
     }
 }

@@ -10,6 +10,8 @@ import android.util.Log;
 import com.google.assigner_mobile.models.Assignment;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
 
 public class AssignmentHelper {
@@ -39,29 +41,49 @@ public class AssignmentHelper {
      * @param description Deskripsi assignment
      * @param createdAt Tanggal dibuatnya assignment
      * @param deadline Tanggal deadline assignment
+     * @return boolean apakah data berhasil dimasukkan atau tidak
      */
-    public void insert(Integer userId, Integer groupId, String name, String description, LocalDate createdAt, LocalDate deadline) {
+    public boolean insert(Integer userId, Integer groupId, String name, String description, LocalDate createdAt, LocalDate deadline) {
         SQLiteDatabase db = dbh.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("user_id", userId);
-        values.put("group_id", groupId);
-        values.put("name", name);
-        values.put("description", description);
-        values.put("created_at_epoch_day", createdAt.toEpochDay());
-        values.put("deadline_epoch_day", deadline.toEpochDay());
 
-        db.insert(TABLE_NAME, null, values);
+        try {
+            values.put("user_id", userId);
+            values.put("group_id", groupId);
+            values.put("name", name);
+            values.put("description", description);
+            values.put("created_at_epoch_day", createdAt.toEpochDay());
+            values.put("deadline_epoch_day", deadline.toEpochDay());
+
+            db.insert(TABLE_NAME, null, values);
+        } catch (Exception e) {
+            Log.e("AssignmentHelper", String.format("Insert failed: %s", e.getMessage()));;
+            return false;
+        }
+
         Log.d("AssignmentHelper", String.format("Data inserted: %s", name));
+
+        return true;
     }
 
     /**
      * Fungsi untuk menghapus data assignment dari database
      * @param id ID dari assignment yang akan dihapus
+     * @return boolean apakah data berhasil dihapus atau tidak
      */
-    public void delete(int id) {
+    public boolean delete(int id) {
         SQLiteDatabase db = dbh.getWritableDatabase();
-        db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+
+        try {
+            db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+        } catch (Exception e) {
+            Log.e("AssignmentHelper", String.format("Delete failed: %s", e.getMessage()));
+            return false;
+        }
+
         Log.d("AssignmentHelper", String.format("Data deleted: %s", id));
+
+        return true;
     }
 
     /**
@@ -69,29 +91,88 @@ public class AssignmentHelper {
      * @param id ID dari assignment yang akan diubah
      * @param changeColumnName Nama kolom yang akan diubah
      * @param changeColumnValue Nilai kolom yang akan diubah
+     * @return boolean apakah data berhasil diubah atau tidak
      */
-    public void update(int id, String changeColumnName, String changeColumnValue) {
+    public boolean update(int id, String changeColumnName, String changeColumnValue) {
         SQLiteDatabase db = dbh.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(changeColumnName, changeColumnValue);
-        db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(id)});
+
+        try {
+            values.put(changeColumnName, changeColumnValue);
+            db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(id)});
+        } catch (Exception e) {
+            Log.e("AssignmentHelper", String.format("Update failed: %s", e.getMessage()));
+            return false;
+        }
+
         Log.d("AssignmentHelper", String.format("Data updated: %s", id));
+
+        return true;
     }
 
-    public void update(int id, String changeColumnName, LocalDate changeColumnValue) {
+    public boolean update(int id, String changeColumnName, Integer changeColumnValue) {
         SQLiteDatabase db = dbh.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(changeColumnName, String.valueOf(changeColumnValue));
-        db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(id)});
+
+        try {
+            values.put(changeColumnName, changeColumnValue);
+            db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(id)});
+        } catch (Exception e) {
+            Log.e("AssignmentHelper", String.format("Update failed: %s", e.getMessage()));
+            return false;
+        }
+
         Log.d("AssignmentHelper", String.format("Data updated: %s", id));
+
+        return true;
     }
 
-    public void update(int id, String changeColumnName, Integer changeColumnValue) {
+    public boolean update(int id, String changeColumnName, LocalDate changeColumnValue) {
         SQLiteDatabase db = dbh.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(changeColumnName, changeColumnValue);
-        db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(id)});
+
+        try {
+            values.put(changeColumnName, changeColumnValue.toEpochDay());
+            db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(id)});
+        } catch (Exception e) {
+            Log.e("AssignmentHelper", String.format("Update failed: %s", e.getMessage()));
+            return false;
+        }
+
         Log.d("AssignmentHelper", String.format("Data updated: %s", id));
+
+        return true;
+    }
+
+    /**
+     * Fungsi untuk mendapatkan satu assignment dari database berdasarkan id.
+     * @param id ID dari assignment yang akan didapatkan
+     * @return Assignment yang didapatkan
+     */
+    public Assignment getAssignmentById(int id) {
+        Cursor cursor = dbh.getData("id", id, TABLE_NAME);
+
+        int     idColumnIndex = cursor.getColumnIndex("id"),
+                userIdColumnIndex = cursor.getColumnIndex("user_id"),
+                groupIdColumnIndex = cursor.getColumnIndex("group_id"),
+                nameColumnIndex = cursor.getColumnIndex("name"),
+                descriptionColumnIndex = cursor.getColumnIndex("description"),
+                createdAtColumnIndex = cursor.getColumnIndex("created_at_epoch_day"),
+                deadlineColumnIndex = cursor.getColumnIndex("deadline_epoch_day");
+
+        LocalDate
+                createdAt = LocalDate.ofEpochDay(cursor.getLong(createdAtColumnIndex)) ,
+                deadline = LocalDate.ofEpochDay(cursor.getLong(deadlineColumnIndex));
+
+        return new Assignment(
+                cursor.getInt(idColumnIndex),
+                cursor.getInt(userIdColumnIndex),
+                cursor.getInt(groupIdColumnIndex),
+                cursor.getString(nameColumnIndex),
+                cursor.getString(descriptionColumnIndex),
+                createdAt,
+                deadline
+        );
     }
 
     public Vector <Assignment> getAllAssignmentsByUserId(Integer userId) {
@@ -126,6 +207,58 @@ public class AssignmentHelper {
             );
 
         }
+
+        assignmentVector = sortAssignmentsVectorByDeadline(assignmentVector);
+
         return assignmentVector;
     }
+
+    public Vector <Assignment> getAllAssignmentsByGroupId(Integer groupId) {
+        Cursor cursor = dbh.getData("group_id", groupId, TABLE_NAME);
+        Vector <Assignment> assignmentVector = new Vector<>();
+
+        for(int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+
+            int     idColumnIndex = cursor.getColumnIndex("id"),
+                    userIdColumnIndex = cursor.getColumnIndex("user_id"),
+                    groupIdColumnIndex = cursor.getColumnIndex("group_id"),
+                    nameColumnIndex = cursor.getColumnIndex("name"),
+                    descriptionColumnIndex = cursor.getColumnIndex("description"),
+                    createdAtColumnIndex = cursor.getColumnIndex("created_at_epoch_day"),
+                    deadlineColumnIndex = cursor.getColumnIndex("deadline_epoch_day");
+
+            LocalDate
+                    createdAt = LocalDate.ofEpochDay(cursor.getLong(createdAtColumnIndex)) ,
+                    deadline = LocalDate.ofEpochDay(cursor.getLong(deadlineColumnIndex));
+
+            assignmentVector.add(
+                    new Assignment(
+                            cursor.getInt(idColumnIndex),
+                            cursor.getInt(userIdColumnIndex),
+                            cursor.getInt(groupIdColumnIndex),
+                            cursor.getString(nameColumnIndex),
+                            cursor.getString(descriptionColumnIndex),
+                            createdAt,
+                            deadline
+                    )
+            );
+
+        }
+
+        assignmentVector = sortAssignmentsVectorByDeadline(assignmentVector);
+
+        return assignmentVector;
+    }
+
+    /**
+     * Fungsi untuk melakukan sort terhadap vector assignment berdasarkan deadline.
+     * @param assignments Vector assignment yang akan di sort
+     * @return Vector assignment yang sudah disort
+     */
+    public Vector<Assignment> sortAssignmentsVectorByDeadline(Vector<Assignment> assignments) {
+        Collections.sort(assignments, (o1, o2) -> o1.getDeadline().compareTo(o2.getDeadline()));
+        return assignments;
+    }
+
 }

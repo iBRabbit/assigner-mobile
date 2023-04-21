@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 public class DatabaseHelper extends SQLiteOpenHelper {
     public final static String DATABASE_NAME = "assigner.db";
     public final static int DATABASE_VERSION = 1;
-
     Context context;
     SQLiteDatabase database;
 
@@ -33,6 +32,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL(query);
         Log.i("DatabaseHelper", "Table assignments created");
+
+        query = "CREATE TABLE IF NOT EXISTS groups (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, owner_id INTEGER)";
+        sqLiteDatabase.execSQL(query);
+        Log.i("DatabaseHelper", "Table groups created");
+
     }
 
     @Override
@@ -45,6 +49,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         query = "DROP TABLE IF EXISTS assignments";
         sqLiteDatabase.execSQL(query);
         Log.i("DatabaseHelper", "Table assignments dropped");
+
+        query = "DROP TABLE IF EXISTS groups";
+        sqLiteDatabase.execSQL(query);
+        Log.i("DatabaseHelper", "Table groups dropped");
 
         onCreate(sqLiteDatabase);
     }
