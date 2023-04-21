@@ -14,7 +14,6 @@ public class AuthFunction {
      * @param context
      * @param authID
      */
-
     public void setAuthID(Context context, Integer authID) {
         SharedPreferences preference = context.getSharedPreferences("authID", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preference.edit();
@@ -27,7 +26,6 @@ public class AuthFunction {
      * @param context
      * @return authID
      */
-
     public Integer getAuthID(Context context) {
         SharedPreferences preference = context.getSharedPreferences("authID", Context.MODE_PRIVATE);
         return preference.getInt("authID", -1);

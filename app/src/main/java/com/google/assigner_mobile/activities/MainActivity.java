@@ -8,12 +8,17 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.assigner_mobile.R;
+import com.google.assigner_mobile.helpers.seeders.DatabaseSeeder;
+
+import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button  mainRegisterButton,
             mainLoginButton;
 
+
+    DatabaseSeeder databaseSeeder = new DatabaseSeeder();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +29,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainRegisterButton.setOnClickListener(this);
         mainLoginButton.setOnClickListener(this);
 
+        try {
+            databaseSeeder.seed(this);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public void onClick(View view) {

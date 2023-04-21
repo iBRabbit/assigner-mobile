@@ -3,27 +3,22 @@ package com.google.assigner_mobile.models;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 
-import androidx.annotation.ColorInt;
-
-import com.google.assigner_mobile.adapters.AssignmentsAdapter;
 import com.google.assigner_mobile.functions.DateFunction;
-
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.Vector;
 
 public class Assignment {
 
     private int id;
+    private Integer userId;
     private Integer groupId;
     private String name;
     private String description;
     private LocalDate createdAt;
     private LocalDate deadline;
 
-    public Assignment(int id, int groupId, String name, String description, LocalDate createdAt, LocalDate deadline) {
+    public Assignment(int id, int userId, int groupId, String name, String description, LocalDate createdAt, LocalDate deadline) {
         this.id = id;
+        this.userId = userId;
         this.groupId = groupId;
         this.name = name;
         this.description = description;
@@ -79,35 +74,45 @@ public class Assignment {
         this.deadline = deadline;
     }
 
+    /**
+     * Fungsi untuk menghitung deadline assignment dan mengembalikannya dalam bentuk teks (String)
+     * @param deadline tanggal deadline assignment
+     * @return String teks deadline assignment
+     */
     @SuppressLint("DefaultLocale")
     public String calculateDeadlineDueAsText(LocalDate deadline) {
 
         long dueInDays = new DateFunction().calculateDateDiffFromNow(deadline);
 
-        String deadlineTimeLeft;
+        String deadlineTimeLeftText;
 
         if(dueInDays <= 0)
-            deadlineTimeLeft = "Overdue";
+            deadlineTimeLeftText = "Overdue";
         else if(dueInDays < 30)
-            deadlineTimeLeft = String.format("Due in %d days", dueInDays);
+            deadlineTimeLeftText = String.format("Due in %d days", dueInDays);
         else if(dueInDays < 365)
-            deadlineTimeLeft = String.format("Due in %d months and %d days", dueInDays / 30, dueInDays % 30);
+            deadlineTimeLeftText = String.format("Due in %d months and %d days", dueInDays / 30, dueInDays % 30);
         else
-            deadlineTimeLeft = String.format("Due in %d years", dueInDays / 365);
+            deadlineTimeLeftText = String.format("Due in %d years", dueInDays / 365);
 
-        return deadlineTimeLeft;
+        return deadlineTimeLeftText;
     }
 
+    /**
+     * Fungsi untuk menghitung deadline assignment dan mengembalikannya dalam bentuk warna (int)
+     * @param deadline
+     * @return int warna deadline assignment
+     */
     public int getDueColor(LocalDate deadline) {
 
         long dueInDays = new DateFunction().calculateDateDiffFromNow(deadline);
 
         if(dueInDays <= 0)
-            return Color.parseColor("#DC3545");
-        else if(dueInDays < 30)
-            return Color.parseColor("#FFC107");
+            return Color.parseColor("#DC3545"); // Red
+        else if(dueInDays < 3)
+            return Color.parseColor("#FFC107"); // Yellow
         else
-            return Color.parseColor("#198754");
+            return Color.parseColor("#198754"); // Green
 
     }
 

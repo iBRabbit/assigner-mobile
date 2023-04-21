@@ -28,6 +28,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(query);
         Log.i("DatabaseHelper", "Table users created");
 
+
+        query = "CREATE TABLE IF NOT EXISTS assignments (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, group_id INTEGER, name TEXT, description TEXT, created_at_epoch_day INT, deadline_epoch_day INT)";
+
+        sqLiteDatabase.execSQL(query);
+        Log.i("DatabaseHelper", "Table assignments created");
     }
 
     @Override
@@ -36,13 +41,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(query);
         Log.i("DatabaseHelper", "Table users dropped");
         onCreate(sqLiteDatabase);
+
+        query = "DROP TABLE IF EXISTS assignments";
+        sqLiteDatabase.execSQL(query);
+        Log.i("DatabaseHelper", "Table assignments dropped");
+
+        onCreate(sqLiteDatabase);
     }
 
     /**
      * Fungsi untuk menjalankan query secara aman dengan menangkap error
      * @param query Query yang akan dijalankan
      */
-
     public void execQuery(String query) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
@@ -61,7 +71,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param tableName Nama tabel yang akan diambil
      * @return Cursor Mengembalikan cursor yang berisi data yang diambil
      */
-
     public Cursor getData(String columnName, Integer num, String tableName) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
@@ -85,7 +94,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param tableName Nama tabel yang akan diambil
      * @return Cursor Mengembalikan cursor yang berisi data yang diambil
      */
-
     public Cursor getData(String columnName, String str, String tableName) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
@@ -106,7 +114,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param query Query yang akan dijalankan
      * @return Cursor Mengembalikan cursor yang berisi data yang diambil
      */
-
     public Cursor getDataWithQuery(String query) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(query, null);

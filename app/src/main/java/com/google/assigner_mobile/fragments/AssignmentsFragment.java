@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 
 import com.google.assigner_mobile.R;
 import com.google.assigner_mobile.adapters.AssignmentsAdapter;
+import com.google.assigner_mobile.functions.AuthFunction;
+import com.google.assigner_mobile.functions.GlobalFunction;
+import com.google.assigner_mobile.helpers.AssignmentHelper;
 import com.google.assigner_mobile.helpers.seeders.DatabaseSeeder;
 import com.google.assigner_mobile.models.Assignment;
 
@@ -27,6 +30,11 @@ public class AssignmentsFragment extends Fragment {
     AssignmentsAdapter assignmentsAdapter;
     RecyclerView assignmentsRecyclerView;
 
+    AssignmentHelper asgDB;
+
+    AuthFunction auth = new AuthFunction();
+    GlobalFunction func = new GlobalFunction();
+
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable  ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,11 +47,15 @@ public class AssignmentsFragment extends Fragment {
         assignmentsRecyclerView = view.findViewById(R.id.assignmentsRecyclerView);
 
         assignmentVector = new Vector<>();
-        DatabaseSeeder seed = new DatabaseSeeder();
-        assignmentVector = seed.generateAssignmentDummyVector();
 
+        asgDB = new AssignmentHelper(getContext());
 
-        // Print All Assignment Vector
+        asgDB.open();
+
+        assignmentVector = asgDB.getAllAssignmentsByUserId(auth.getAuthID(func.safeGetContext(getContext())));
+
+        asgDB.close();
+
 
         assignmentsAdapter = new AssignmentsAdapter(getContext());
         assignmentsAdapter.setAssignmentVector(assignmentVector);

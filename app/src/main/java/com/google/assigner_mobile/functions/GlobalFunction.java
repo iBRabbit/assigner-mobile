@@ -1,5 +1,7 @@
 package com.google.assigner_mobile.functions;
 
+import android.content.Context;
+
 public class GlobalFunction {
 
     /**
@@ -9,5 +11,9 @@ public class GlobalFunction {
      */
     public Boolean hasInjection(String str) {
         return (str.contains("'") || str.contains("\"") || str.contains(";") || str.contains("--"));
+    }
+
+    public Context safeGetContext(Context context) {
+        return context == null ? null : context.getApplicationContext();
     }
 }

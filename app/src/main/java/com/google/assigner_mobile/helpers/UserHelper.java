@@ -10,6 +10,8 @@ import android.util.Log;
 import com.google.assigner_mobile.functions.GlobalFunction;
 import com.google.assigner_mobile.models.User;
 
+import java.util.Vector;
+
 public class UserHelper {
     private static final String TABLE_NAME = "users";
     private DatabaseHelper dbh;
@@ -133,6 +135,33 @@ public class UserHelper {
                 cursor.getString(emailColIndex),
                 cursor.getString(phoneNumberColIndex)
         );
+    }
+
+    public Vector <User> getAllData() {
+        Vector <User> userVector = new Vector<>();
+        Cursor cursor = dbh.getDataWithQuery("SELECT * FROM users");
+
+        if(cursor.getCount() == 0)
+            return null;
+
+        for(int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+
+            int idColIndex = cursor.getColumnIndex("id"),
+                    usernameColIndex = cursor.getColumnIndex("username"),
+                    passwordColIndex = cursor.getColumnIndex("password"),
+                    phoneNumberColIndex = cursor.getColumnIndex("phone_number"),
+                    emailColIndex = cursor.getColumnIndex("email");
+
+            userVector.add(new User(
+                    cursor.getInt(idColIndex),
+                    cursor.getString(usernameColIndex),
+                    cursor.getString(passwordColIndex),
+                    cursor.getString(emailColIndex),
+                    cursor.getString(phoneNumberColIndex)
+            ));
+        }
+        return userVector;
     }
 
 }
