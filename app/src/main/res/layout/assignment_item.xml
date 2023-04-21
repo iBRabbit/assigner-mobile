@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/assignmentCardView"
+    android:overScrollMode="never"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/border"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/assignmentNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calculus 3 Assignment"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:layout_margin="2dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/assignmentGroupTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Group 3"
+            android:textColor="@color/black"
+            android:textSize="13dp"
+            android:layout_margin="2dp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/assignmentDeadlineTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Due in 5 days"
+            android:textColor="@color/success"
+            android:textSize="13dp"
+            android:layout_margin="2dp"
+            />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
