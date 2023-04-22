@@ -7,6 +7,7 @@ import com.google.assigner_mobile.functions.GlobalFunction;
 import com.google.assigner_mobile.helpers.AssignmentHelper;
 import com.google.assigner_mobile.helpers.DatabaseHelper;
 import com.google.assigner_mobile.helpers.GroupHelper;
+import com.google.assigner_mobile.helpers.GroupMembersHelper;
 import com.google.assigner_mobile.helpers.UserHelper;
 import com.google.assigner_mobile.models.Assignment;
 import com.google.assigner_mobile.models.Group;
@@ -24,6 +25,7 @@ public class DatabaseSeeder {
     AssignmentHelper asgDB;
     UserHelper userDB;
     GroupHelper groupDB;
+    GroupMembersHelper groupMembersDB;
 
     DatabaseHelper dbh;
 
@@ -49,6 +51,34 @@ public class DatabaseSeeder {
         dummyDataVector.add(new Assignment(10, 1, 1, "Assignment 10", "This is assignment 10", LocalDate.of(2023,4,10), LocalDate.of(2023, 4, 20)));
 
         return dummyDataVector;
+    }
+
+    public void seedGroupMembers(Context context, int seedSize) {
+        groupMembersDB = new GroupMembersHelper(context);
+
+        groupMembersDB.open();
+        userDB.open();
+        groupDB.open();
+
+        Vector <User> userVector = userDB.getAllData();
+        Vector <Group> groupVector = groupDB.getAllData();
+        int userIdLowerBound = userVector.get(0).getId(),
+                userIdUpperBound = userVector.get(userVector.size() - 1).getId(),
+                groupIdLowerBound = groupVector.get(0).getId(),
+                groupIdUpperBound = groupVector.get(groupVector.size() - 1).getId();
+
+        userDB.close();
+        groupDB.close();
+
+        int i = 0;
+        for(i = 0; i < seedSize; i++)
+            groupMembersDB.insert(
+                    rand.randIntWithRange(groupIdLowerBound, groupIdUpperBound),
+                    rand.randIntWithRange(userIdLowerBound, userIdUpperBound)
+            );
+
+        Log.d("DatabaseSeeder", String.format("Group Members Seeder : Successfully seeded %d group members", i));
+
     }
 
     public void seedGroups(Context context, int seedSize) {
@@ -151,8 +181,10 @@ public class DatabaseSeeder {
 
 
     public void seedFresh(Context context) throws SQLException{
+        DatabaseHelper dbh = new DatabaseHelper(context);
         dbh.execQuery("DELETE FROM users");
         dbh.execQuery("DELETE FROM assignments");
+        dbh.execQuery("DELETE FROM group_members");
         dbh.execQuery("DELETE FROM groups");
 
         seed(context);
@@ -165,6 +197,7 @@ public class DatabaseSeeder {
     public void seed(Context context) throws SQLException {
         seedUsers(context, 3);
         seedGroups(context, 10);
+        seedGroupMembers(context, 20);
         seedAssignments(context, 20);
     }
 }

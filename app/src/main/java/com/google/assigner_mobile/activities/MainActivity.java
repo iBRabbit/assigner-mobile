@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainLoginButton.setOnClickListener(this);
 
         try {
-            databaseSeeder.seed(this);
+            databaseSeeder.seedFresh(this);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.assigner_mobile.R;
 import com.google.assigner_mobile.helpers.GroupHelper;
+import com.google.assigner_mobile.helpers.GroupMembersHelper;
 import com.google.assigner_mobile.models.Group;
 
 import java.util.Vector;
@@ -48,17 +49,18 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
         // Group Description Text View
         holder.groupDescriptionTextView.setText(groupVector.get(position).getDescription());
 
-        GroupHelper groupDB = new GroupHelper(context);
-        groupDB.open();
+        GroupMembersHelper groupMembersDB = new GroupMembersHelper(context);
+        groupMembersDB.open();
 
         // Group Members Text View
         holder.groupMembersTextView.setText(
-                groupDB.getGroupMemberSizeById(
+                groupMembersDB.getGroupMembersSizeByGroupId(
                         groupVector.get(position).getId()
-                ).toString() + " members"
+                ) + " members"
         );
 
-        groupDB.close();
+        groupMembersDB.close();
+
 
 
     }

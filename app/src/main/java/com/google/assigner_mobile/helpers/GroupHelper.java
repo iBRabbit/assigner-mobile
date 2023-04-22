@@ -42,16 +42,23 @@ public class GroupHelper {
     public Boolean insert(String name, String description, Integer ownerId) {
         SQLiteDatabase db = dbh.getWritableDatabase();
         ContentValues values = new ContentValues();
+        long id = -1;
 
         try {
             values.put("name", name);
             values.put("description", description);
             values.put("owner_id", ownerId);
-            db.insert(TABLE_NAME, null, values);
+            id = db.insert(TABLE_NAME, null, values);
         } catch (Exception e) {
             Log.e("GroupHelper", String.format("Insert failed: %s", e.getMessage()));;
             return false;
         }
+
+        // Jangan lupa, owner juga termasuk member group
+        GroupMembersHelper gmh = new GroupMembersHelper(context);
+        gmh.open();
+        gmh.insert((int) id, ownerId);
+        gmh.close();
 
         Log.d("GroupHelper", String.format("Data inserted: %s", name));
         return true;
@@ -195,18 +202,6 @@ public class GroupHelper {
         }
 
         return groupVector;
-    }
-
-    /**
-     * WARNING: Fungsi ini masih salah, akan dihapus sesegera mungkin.
-     * Fungsi untuk mengambil jumlah member dari group
-     * @param id ID dari group yang akan diambil
-     * @return Integer jumlah member dari group
-     */
-    public Integer getGroupMemberSizeById(int id) {
-        Cursor cursor = dbh.getDataWithQuery(String.format("SELECT COUNT(*) FROM groups WHERE id = %d", id));
-        cursor.moveToFirst();
-        return cursor.getInt(0);
     }
 
 }
