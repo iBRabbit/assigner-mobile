@@ -14,11 +14,12 @@ import com.google.assigner_mobile.fragments.AssignmentsFragment;
 import com.google.assigner_mobile.fragments.GroupsFragment;
 import com.google.assigner_mobile.fragments.NotificationsFragment;
 import com.google.assigner_mobile.fragments.ProfileFragment;
+import com.google.assigner_mobile.functions.GlobalFunction;
 
 public class HomeActivity extends AppCompatActivity {
     FrameLayout frameLayout;
     BottomNavigationView bottomNavigationView;
-
+    GlobalFunction fragment = new GlobalFunction();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,33 +33,21 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId() == R.id.assignments)
-                    return openFragment(new AssignmentsFragment());
+                    return fragment.openFragment(new AssignmentsFragment(), HomeActivity.this);
 
                 if(item.getItemId() == R.id.groups)
-                    return openFragment(new GroupsFragment());
+                    return fragment.openFragment(new GroupsFragment(), HomeActivity.this);
 
                 if(item.getItemId() == R.id.notifications)
-                    return openFragment(new NotificationsFragment());
+                    return fragment.openFragment(new NotificationsFragment(), HomeActivity.this);
 
                 if(item.getItemId() == R.id.profile)
-                    return openFragment(new ProfileFragment());
+                    return fragment.openFragment(new ProfileFragment(), HomeActivity.this);
 
                 return false;
             }
         });
 
-        openFragment(new AssignmentsFragment());
-    }
-
-    boolean openFragment(Fragment fragment) {
-        if(fragment == null)
-            return false;
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.homeFrameLayout, fragment)
-                .commit();
-
-        return true;
+        fragment.openFragment(new AssignmentsFragment(), HomeActivity.this);
     }
 }
