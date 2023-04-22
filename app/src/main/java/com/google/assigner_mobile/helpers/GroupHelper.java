@@ -136,6 +136,7 @@ public class GroupHelper {
     }
 
     /**
+     * WARNING: Fungsi ini masih salah. Akan diubah di versi selanjutnya
      * Fungsi untuk mengambil data group berdasarkan id
      * @param id ID dari group yang akan diambil
      * @return Vector berisi data group
@@ -164,6 +165,10 @@ public class GroupHelper {
         return groupVector;
     }
 
+    /**
+     * Fungsi untuk mengambil semua data group
+     * @return
+     */
     public Vector <Group> getAllData() {
         Vector <Group> groupVector = new Vector<>();
         Cursor cursor = dbh.getDataWithQuery("SELECT * FROM groups");
@@ -190,6 +195,18 @@ public class GroupHelper {
         }
 
         return groupVector;
+    }
+
+    /**
+     * WARNING: Fungsi ini masih salah, akan dihapus sesegera mungkin.
+     * Fungsi untuk mengambil jumlah member dari group
+     * @param id ID dari group yang akan diambil
+     * @return Integer jumlah member dari group
+     */
+    public Integer getGroupMemberSizeById(int id) {
+        Cursor cursor = dbh.getDataWithQuery(String.format("SELECT COUNT(*) FROM groups WHERE id = %d", id));
+        cursor.moveToFirst();
+        return cursor.getInt(0);
     }
 
 }

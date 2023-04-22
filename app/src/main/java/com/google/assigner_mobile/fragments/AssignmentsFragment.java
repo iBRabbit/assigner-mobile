@@ -51,9 +51,7 @@ public class AssignmentsFragment extends Fragment {
         asgDB = new AssignmentHelper(getContext());
 
         asgDB.open();
-
         assignmentVector = asgDB.getAllAssignmentsByUserId(auth.getAuthID(func.safeGetContext(getContext())));
-
         asgDB.close();
 
 
