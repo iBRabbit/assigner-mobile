@@ -1,6 +1,7 @@
 package com.google.assigner_mobile.functions;
 
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -51,6 +52,14 @@ public class GlobalFunction {
                 .replace(R.id.homeFrameLayout, fragment)
                 .commit();
 
+        return true;
+    }
+
+    public boolean switchActivity(Context context, Class<?> cls) {
+        if(context == null || cls == null)
+            return false;
+
+        context.startActivity(new Intent(context, cls));
         return true;
     }
 }

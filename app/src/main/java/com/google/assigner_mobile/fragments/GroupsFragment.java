@@ -1,5 +1,6 @@
 package com.google.assigner_mobile.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,8 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.assigner_mobile.R;
+import com.google.assigner_mobile.activities.HomeActivity;
+import com.google.assigner_mobile.activities.groups.CreateGroupActivity;
 import com.google.assigner_mobile.adapters.GroupsAdapter;
 import com.google.assigner_mobile.functions.AuthFunction;
 import com.google.assigner_mobile.functions.GlobalFunction;
@@ -19,7 +23,7 @@ import com.google.assigner_mobile.models.Group;
 
 import java.util.Vector;
 
-public class GroupsFragment extends Fragment {
+public class GroupsFragment extends Fragment implements View.OnClickListener{
 
     Vector<Group> groupVector;
     GroupsAdapter groupsAdapter;
@@ -29,6 +33,8 @@ public class GroupsFragment extends Fragment {
 
     AuthFunction auth = new AuthFunction();
     GlobalFunction cont = new GlobalFunction();
+
+    Button groupsCreateGroupButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +60,19 @@ public class GroupsFragment extends Fragment {
         groupsRecyclerView.setAdapter(groupsAdapter);
         groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        groupsCreateGroupButton = view.findViewById(R.id.groupsCreateGroupButton);
+        groupsCreateGroupButton.setOnClickListener(this);
+
         return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent;
+        if(view == groupsCreateGroupButton) {
+            intent = new Intent(getContext(), CreateGroupActivity.class);
+            startActivity(intent);
+
+        }
     }
 }
