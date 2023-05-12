@@ -3,6 +3,7 @@ package com.google.assigner_mobile.activities.groups;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -203,7 +204,12 @@ public class GroupDetailsActivity extends AppCompatActivity implements View.OnCl
         }
 
         if(view == groupDetailsViewGroupButton) {
-            // TODO: View Members
+            // TODO: View
+            Intent intent = new Intent(this, GroupMembersActivity.class);
+
+            intent.putExtra("groupId", group.getId());
+
+            startActivity(intent);
         }
     }
 
