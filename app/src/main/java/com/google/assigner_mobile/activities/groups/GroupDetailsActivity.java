@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,15 +15,19 @@ import android.widget.Toast;
 
 import com.google.assigner_mobile.R;
 import com.google.assigner_mobile.functions.AuthFunction;
+import com.google.assigner_mobile.helpers.AssignmentHelper;
 import com.google.assigner_mobile.helpers.GroupHelper;
 import com.google.assigner_mobile.helpers.GroupMembersHelper;
 import com.google.assigner_mobile.helpers.UserHelper;
 import com.google.assigner_mobile.models.Group;
 import com.google.assigner_mobile.models.User;
 
+import java.time.LocalDate;
+
 public class GroupDetailsActivity extends AppCompatActivity implements View.OnClickListener{
 
     GroupHelper groupDB;
+    AssignmentHelper asgDB;
     Group group;
     User owner;
 
@@ -48,6 +53,7 @@ public class GroupDetailsActivity extends AppCompatActivity implements View.OnCl
 
         groupDB = new GroupHelper(this);
         userDB = new UserHelper(this);
+        asgDB = new AssignmentHelper(this);
 
         groupDB.open();
         userDB.open();
@@ -83,6 +89,52 @@ public class GroupDetailsActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         if(view == groupDetailsAddAssignmentButton) {
             // TODO: Add Assignment (Only Admin)
+
+            EditText assignmentNameEditText = new EditText(this);
+            EditText assignmentDescriptionEditText = new EditText(this);
+            DatePicker assignmentDueDatePicker = new DatePicker(this);
+
+            assignmentNameEditText.setHint("Assignment Name");
+            assignmentDescriptionEditText.setHint("Assignment Description");
+
+            LinearLayout layout = new LinearLayout(this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+            layout.addView(assignmentNameEditText);
+            layout.addView(assignmentDescriptionEditText);
+            layout.addView(assignmentDueDatePicker);
+
+            new AlertDialog.Builder(this).setTitle("Add Assignment")
+                    .setMessage("Add Assignment to Group")
+                    .setView(layout)
+                    .setPositiveButton("Add", (dialogInterface, i) -> {
+                        asgDB.open();
+                        String  assignmentName = assignmentNameEditText.getText().toString(),
+                                assignmentDescription = assignmentDescriptionEditText.getText().toString();
+
+                        LocalDate assignmentDueDate = LocalDate.of(assignmentDueDatePicker.getYear(), assignmentDueDatePicker.getMonth() + 1, assignmentDueDatePicker.getDayOfMonth());
+
+                        LocalDate assignmentCreatedAt = LocalDate.now();
+                        Integer progress = 0;
+
+                        if(assignmentDueDate.isBefore(assignmentCreatedAt)) {
+                            Toast.makeText(this, "Due Date cannot be before today", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if(assignmentName.isEmpty() || assignmentDescription.isEmpty()) {
+                            Toast.makeText(this, "Assignment Name and Description cannot be empty", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        asgDB.insert(auth.getAuthID(this), group.getId(), assignmentName, assignmentDescription, assignmentCreatedAt, assignmentDueDate, progress);
+
+                        asgDB.close();
+
+                        Toast.makeText(this, String.format("Assignment %s created.", assignmentName), Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+
         }
 
         if(view == groupDetailsEditGroupButton) {
