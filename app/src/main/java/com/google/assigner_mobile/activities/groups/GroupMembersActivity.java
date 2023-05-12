@@ -44,6 +44,7 @@ public class GroupMembersActivity extends AppCompatActivity {
 
         groupMembersAdapter = new GroupMembersAdapter(this);
         groupMembersAdapter.setGroupMembersVector(groupMembersVector);
+        groupMembersAdapter.setGroup(groupId);
 
         groupMembersRecyclerView.setAdapter(groupMembersAdapter);
         groupMembersRecyclerView.setLayoutManager(new LinearLayoutManager(this));

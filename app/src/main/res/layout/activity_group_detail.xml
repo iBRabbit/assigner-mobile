@@ -50,16 +50,6 @@
 
 
         <Button
-            android:id="@+id/groupDetailsAddAssignmentButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Assignment"
-            android:backgroundTint="@color/success"
-            android:textColor="@color/white"
-            android:padding="10dp"
-            />
-
-        <Button
             android:id="@+id/groupDetailsEditGroupButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

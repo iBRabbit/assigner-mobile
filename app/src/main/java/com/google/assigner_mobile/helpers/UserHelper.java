@@ -145,6 +145,28 @@ public class UserHelper {
         );
     }
 
+    public User getUser(String columnName, String str) {
+        Cursor cursor = dbh.getData(columnName, str, TABLE_NAME);
+        if(cursor.getCount() == 0)
+            return null;
+
+        cursor.moveToFirst();
+
+        int idColIndex = cursor.getColumnIndex("id"),
+                usernameColIndex = cursor.getColumnIndex("username"),
+                passwordColIndex = cursor.getColumnIndex("password"),
+                phoneNumberColIndex = cursor.getColumnIndex("phone_number"),
+                emailColIndex = cursor.getColumnIndex("email");
+
+        return new User(
+                cursor.getInt(idColIndex),
+                cursor.getString(usernameColIndex),
+                cursor.getString(passwordColIndex),
+                cursor.getString(emailColIndex),
+                cursor.getString(phoneNumberColIndex)
+        );
+    }
+
     public Vector <User> getAllData() {
         Vector <User> userVector = new Vector<>();
         Cursor cursor = dbh.getDataWithQuery("SELECT * FROM users");
