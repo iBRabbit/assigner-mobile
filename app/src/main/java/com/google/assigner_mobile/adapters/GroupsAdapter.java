@@ -2,6 +2,7 @@ package com.google.assigner_mobile.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.assigner_mobile.R;
+import com.google.assigner_mobile.activities.groups.GroupDetailsActivity;
 import com.google.assigner_mobile.helpers.GroupHelper;
 import com.google.assigner_mobile.helpers.GroupMembersHelper;
 import com.google.assigner_mobile.models.Group;
@@ -61,8 +63,13 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
 
         groupMembersDB.close();
 
+        // Group Card View
+        holder.groupCardView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, GroupDetailsActivity.class);
+            intent.putExtra("groupId", groupVector.get(position).getId());
 
-
+            context.startActivity(intent);
+        });
     }
 
     @Override

@@ -8,6 +8,10 @@ import android.util.Log;
 
 import android.database.SQLException;
 
+import com.google.assigner_mobile.models.Group;
+
+import java.util.Vector;
+
 public class GroupMembersHelper {
     private static final String TABLE_NAME = "group_members";
     private DatabaseHelper dbh;
@@ -112,6 +116,20 @@ public class GroupMembersHelper {
         Log.i("GroupMembersHelper", String.format("SELECT COUNT(*) FROM group_members WHERE group_id = %d -> %d" , groupId, cursor.getInt(0)));
 
         return cursor.getInt(0);
+    }
+
+    public Vector<Group> getAllGroupsByUserId(Integer userId) {
+        Vector<Group> groups = new Vector<Group>();
+        Cursor cursor = dbh.getDataWithQuery(String.format("SELECT * FROM group_members WHERE user_id = %d", userId));
+
+        for(int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+            Integer groupId = cursor.getInt(1);
+            Group group = new GroupHelper(context).getGroupById(groupId);
+            groups.add(group);
+        }
+
+        return groups;
     }
 
 

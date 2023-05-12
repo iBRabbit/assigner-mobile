@@ -149,6 +149,7 @@ public class GroupHelper {
      * @return Vector berisi data group
      */
     public Vector <Group> getAllGroupsByUserId(int id) {
+        // Get Semua group yang di mana user tersebut adalah owner //
         Cursor cursor = dbh.getData("owner_id", id, TABLE_NAME);
         Vector <Group> groupVector = new Vector<Group>();
 
@@ -169,6 +170,27 @@ public class GroupHelper {
             );
         }
 
+        // Get Semua group yang di mana user tersebut adalah member //
+        GroupMembersHelper gmh = new GroupMembersHelper(context);
+        gmh.open();
+        Vector <Group> groupVector2 = gmh.getAllGroupsByUserId(id);
+
+
+        // Gabungkan kedua vector//
+
+        groupVector.addAll(groupVector2);
+
+        // Hapus duplikat //
+        for(int i = 0; i < groupVector.size(); i++) {
+            for(int j = i + 1; j < groupVector.size(); j++) {
+                if(groupVector.get(i).getId() == groupVector.get(j).getId()) {
+                    groupVector.remove(j);
+                    j--;
+                }
+            }
+        }
+
+        gmh.close();
         return groupVector;
     }
 
@@ -202,6 +224,15 @@ public class GroupHelper {
         }
 
         return groupVector;
+    }
+
+
+    /**
+     * Fungsi untuk melihat apakah user adalah owner dari group
+     *
+     */
+    public Boolean isOwner(int userId, int groupId) {
+        return getGroupById(groupId).getOwnerId() == userId;
     }
 
 }

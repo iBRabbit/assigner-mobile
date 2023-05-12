@@ -133,7 +133,7 @@ public class UserHelper {
         int idColIndex = cursor.getColumnIndex("id"),
                 usernameColIndex = cursor.getColumnIndex("username"),
                 passwordColIndex = cursor.getColumnIndex("password"),
-                phoneNumberColIndex = cursor.getColumnIndex("phoneNumber"),
+                phoneNumberColIndex = cursor.getColumnIndex("phone_number"),
                 emailColIndex = cursor.getColumnIndex("email");
 
         return new User(

@@ -23,7 +23,7 @@ public class AuthFunction {
 
     /**
      * Fungsi untuk mengambil authID dari SharedPreferences
-     * @param context
+     * @param context Context dari activity
      * @return authID
      */
     public Integer getAuthID(Context context) {
