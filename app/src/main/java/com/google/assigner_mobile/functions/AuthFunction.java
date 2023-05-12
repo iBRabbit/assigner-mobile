@@ -32,10 +32,10 @@ public class AuthFunction {
     }
 
     /**
-     * Fungsi untuk mengecek apakah user sudah login
-     * @param context
+     * Fungsi untuk menjaga agar user tidak bisa kembali ke halaman login jika sudah login.
+     * @param context Context dari activity
      */
-    public void authCheck(Context context) {
+    public void redirect(Context context) {
         SharedPreferences preference = context.getSharedPreferences("authID", Context.MODE_PRIVATE);
         int authID = preference.getInt("authID", -1);
 

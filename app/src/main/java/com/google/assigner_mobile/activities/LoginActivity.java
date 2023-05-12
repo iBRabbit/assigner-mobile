@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginDirectToRegisterTextView.setOnClickListener(this);
 
         userDB = new UserHelper(this);
+        auth.redirect(this);
 
     }
 

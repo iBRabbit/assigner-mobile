@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -13,12 +14,17 @@ import com.google.assigner_mobile.fragments.AssignmentsFragment;
 import com.google.assigner_mobile.fragments.GroupsFragment;
 import com.google.assigner_mobile.fragments.NotificationsFragment;
 import com.google.assigner_mobile.fragments.ProfileFragment;
+import com.google.assigner_mobile.functions.AuthFunction;
 import com.google.assigner_mobile.functions.GlobalFunction;
 
 public class HomeActivity extends AppCompatActivity {
     FrameLayout frameLayout;
     BottomNavigationView bottomNavigationView;
     GlobalFunction fragment = new GlobalFunction();
+
+    AuthFunction auth = new AuthFunction();
+
+    Boolean isAppPaused = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
 
         frameLayout = findViewById(R.id.homeFrameLayout);
         bottomNavigationView = findViewById(R.id.homeBottomNavigation);
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -48,5 +55,24 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         fragment.openFragment(new AssignmentsFragment(), HomeActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isAppPaused = true;
+        Log.i("HomeActivity", "onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(isAppPaused) {
+            auth.redirect(this);
+            isAppPaused = false;
+        }
+
+        Log.i("HomeActivity", "onResume");
     }
 }

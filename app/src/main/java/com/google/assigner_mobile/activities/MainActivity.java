@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.assigner_mobile.R;
+import com.google.assigner_mobile.functions.AuthFunction;
 import com.google.assigner_mobile.helpers.seeders.DatabaseSeeder;
 
 import java.sql.SQLException;
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     DatabaseSeeder databaseSeeder = new DatabaseSeeder();
+
+    AuthFunction auth = new AuthFunction();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainLoginButton = findViewById(R.id.mainLoginButton);
         mainRegisterButton.setOnClickListener(this);
         mainLoginButton.setOnClickListener(this);
+
+        auth.setAuthID(this, -1);
 
         try {
             databaseSeeder.seedFresh(this);
@@ -47,5 +52,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth.redirect(this);
     }
 }
