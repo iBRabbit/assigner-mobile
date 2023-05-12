@@ -1,10 +1,14 @@
 package com.google.assigner_mobile.activities.groups;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +86,38 @@ public class GroupDetailsActivity extends AppCompatActivity implements View.OnCl
 
         if(view == groupDetailsEditGroupButton) {
             // TODO: Edit Group (Only Admin)
+
+            EditText groupNameEditText = new EditText(this);
+            groupNameEditText.setText(group.getName());
+
+            EditText groupDescriptionEditText = new EditText(this);
+            groupDescriptionEditText.setText(group.getDescription());
+
+            LinearLayout layout = new LinearLayout(this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+            layout.addView(groupNameEditText);
+            layout.addView(groupDescriptionEditText);
+
+            new AlertDialog.Builder(this).setTitle("Edit Group")
+                    .setMessage("Edit Group Details")
+                    .setView(layout)
+                    .setPositiveButton("Save", (dialogInterface, i) -> {
+                        group.setName(groupNameEditText.getText().toString());
+                        group.setDescription(groupDescriptionEditText.getText().toString());
+
+                        groupDB.open();
+                        groupDB.update(group.getId(), "name", group.getName());
+                        groupDB.update(group.getId(), "description", group.getDescription());
+
+                        groupDB.close();
+                        Toast.makeText(this, String.format("Group %s Updated", group.getName()), Toast.LENGTH_SHORT).show();
+
+                        groupDetailsGroupNameTextView.setText(group.getName());
+                        groupDetailsGroupDescriptionTextView.setText(group.getDescription());
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+
         }
 
         if(view == groupDetailsDeleteGroupButton) {
