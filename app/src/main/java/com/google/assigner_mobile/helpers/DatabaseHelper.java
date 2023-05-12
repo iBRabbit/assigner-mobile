@@ -28,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.i("DatabaseHelper", "Table users created");
 
 
-        query = "CREATE TABLE IF NOT EXISTS assignments (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, group_id INTEGER, name TEXT, description TEXT, created_at_epoch_day INT, deadline_epoch_day INT)";
+        query = "CREATE TABLE IF NOT EXISTS assignments (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, group_id INTEGER, name TEXT, description TEXT, progress INT,created_at_epoch_day INT, deadline_epoch_day INT)";
 
         sqLiteDatabase.execSQL(query);
         Log.i("DatabaseHelper", "Table assignments created");

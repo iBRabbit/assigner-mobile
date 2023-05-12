@@ -36,6 +36,24 @@
             android:textStyle="italic" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Progress"
+            android:textColor="@color/black"
+            android:textSize="13dp"
+            android:layout_margin="2dp"/>
+
+        <ProgressBar
+            android:id="@+id/assignmentProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:progress="90"
+            android:progressTint="@color/success"
+            />
+
+        <TextView
             android:id="@+id/assignmentDeadlineTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,6 +62,7 @@
             android:textSize="13dp"
             android:layout_margin="2dp"
             />
+
 
     </LinearLayout>
 

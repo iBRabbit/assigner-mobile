@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -66,6 +67,13 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
                         )
         );
 
+        // Assignment Progress Bar //
+        holder.assignmentProgressBar.setProgress(
+                assignmentVector
+                        .get(position)
+                        .getProgress()
+        );
+
         holder.assignmentDeadlineTextView.setText(
                 assignmentVector
                         .get(position)
@@ -89,6 +97,7 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
                     assignmentGroupTextView,
                     assignmentDeadlineTextView;
 
+        ProgressBar assignmentProgressBar;
         CardView    assignmentCardView;
 
         public AssignmentViewHolder(@NonNull View itemView) {
@@ -97,6 +106,7 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
             assignmentNameTextView  = itemView.findViewById(R.id.assignmentNameTextView);
             assignmentGroupTextView = itemView.findViewById(R.id.assignmentGroupTextView);
             assignmentDeadlineTextView = itemView.findViewById(R.id.assignmentDeadlineTextView);
+            assignmentProgressBar = itemView.findViewById(R.id.assignmentProgressBar);
 
             assignmentCardView = itemView.findViewById(R.id.assignmentCardView);
         }

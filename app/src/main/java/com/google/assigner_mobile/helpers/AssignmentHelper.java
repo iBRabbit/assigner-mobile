@@ -53,6 +53,7 @@ public class AssignmentHelper {
             values.put("description", description);
             values.put("created_at_epoch_day", createdAt.toEpochDay());
             values.put("deadline_epoch_day", deadline.toEpochDay());
+            values.put("progress", 0);
 
             db.insert(TABLE_NAME, null, values);
         } catch (Exception e) {
@@ -64,6 +65,31 @@ public class AssignmentHelper {
 
         return true;
     }
+
+    public boolean insert(Integer userId, Integer groupId, String name, String description, LocalDate createdAt, LocalDate deadline, Integer progress) {
+        SQLiteDatabase db = dbh.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        try {
+            values.put("user_id", userId);
+            values.put("group_id", groupId);
+            values.put("name", name);
+            values.put("description", description);
+            values.put("created_at_epoch_day", createdAt.toEpochDay());
+            values.put("deadline_epoch_day", deadline.toEpochDay());
+            values.put("progress", progress);
+
+            db.insert(TABLE_NAME, null, values);
+        } catch (Exception e) {
+            Log.e("AssignmentHelper", String.format("Insert failed: %s", e.getMessage()));
+            return false;
+        }
+
+        Log.d("AssignmentHelper", String.format("Data inserted: %s", name));
+
+        return true;
+    }
+
 
     /**
      * Fungsi untuk menghapus data assignment dari database
@@ -96,7 +122,7 @@ public class AssignmentHelper {
         } catch (Exception e) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -172,6 +198,7 @@ public class AssignmentHelper {
                 nameColumnIndex = cursor.getColumnIndex("name"),
                 descriptionColumnIndex = cursor.getColumnIndex("description"),
                 createdAtColumnIndex = cursor.getColumnIndex("created_at_epoch_day"),
+                progressColumnIndex = cursor.getColumnIndex("progress"),
                 deadlineColumnIndex = cursor.getColumnIndex("deadline_epoch_day");
 
         LocalDate
@@ -185,7 +212,8 @@ public class AssignmentHelper {
                 cursor.getString(nameColumnIndex),
                 cursor.getString(descriptionColumnIndex),
                 createdAt,
-                deadline
+                deadline,
+                cursor.getInt(progressColumnIndex)
         );
     }
 
@@ -202,7 +230,8 @@ public class AssignmentHelper {
                     nameColumnIndex = cursor.getColumnIndex("name"),
                     descriptionColumnIndex = cursor.getColumnIndex("description"),
                     createdAtColumnIndex = cursor.getColumnIndex("created_at_epoch_day"),
-                    deadlineColumnIndex = cursor.getColumnIndex("deadline_epoch_day");
+                    deadlineColumnIndex = cursor.getColumnIndex("deadline_epoch_day"),
+                    progressColumnIndex = cursor.getColumnIndex("progress");
 
             LocalDate
                     createdAt = LocalDate.ofEpochDay(cursor.getLong(createdAtColumnIndex)) ,
@@ -216,7 +245,8 @@ public class AssignmentHelper {
                             cursor.getString(nameColumnIndex),
                             cursor.getString(descriptionColumnIndex),
                             createdAt,
-                            deadline
+                            deadline,
+                            cursor.getInt(progressColumnIndex)
                     )
             );
 
@@ -240,6 +270,7 @@ public class AssignmentHelper {
                     nameColumnIndex = cursor.getColumnIndex("name"),
                     descriptionColumnIndex = cursor.getColumnIndex("description"),
                     createdAtColumnIndex = cursor.getColumnIndex("created_at_epoch_day"),
+                    progressColumnIndex = cursor.getColumnIndex("progress"),
                     deadlineColumnIndex = cursor.getColumnIndex("deadline_epoch_day");
 
             LocalDate
@@ -254,7 +285,8 @@ public class AssignmentHelper {
                             cursor.getString(nameColumnIndex),
                             cursor.getString(descriptionColumnIndex),
                             createdAt,
-                            deadline
+                            deadline,
+                            cursor.getInt(progressColumnIndex)
                     )
             );
 

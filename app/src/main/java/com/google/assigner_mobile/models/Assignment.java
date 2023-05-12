@@ -15,6 +15,8 @@ public class Assignment {
     private String description;
     private LocalDate createdAt;
     private LocalDate deadline;
+    private Integer progress;
+
 
     public Assignment(int id, int userId, int groupId, String name, String description, LocalDate createdAt, LocalDate deadline) {
         this.id = id;
@@ -24,6 +26,18 @@ public class Assignment {
         this.description = description;
         this.createdAt = createdAt;
         this.deadline = deadline;
+        this.progress = 0;
+    }
+
+    public Assignment(int id, int userId, int groupId, String name, String description, LocalDate createdAt, LocalDate deadline, Integer progress) {
+        this.id = id;
+        this.userId = userId;
+        this.groupId = groupId;
+        this.name = name;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.deadline = deadline;
+        this.progress = progress;
     }
 
     public int getId() {
@@ -73,6 +87,9 @@ public class Assignment {
     public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
+
+    public Integer getProgress() { return progress; }
+    public void setProgress(Integer progress) { this.progress = progress; }
 
     /**
      * Fungsi untuk menghitung deadline assignment dan mengembalikannya dalam bentuk teks (String)

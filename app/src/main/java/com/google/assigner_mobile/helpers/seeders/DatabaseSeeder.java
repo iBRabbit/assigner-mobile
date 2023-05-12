@@ -139,7 +139,8 @@ public class DatabaseSeeder {
                     "Assignment " + i,
                     "This is assignment " + i,
                     LocalDate.now(),
-                    LocalDate.of(2023, LocalDate.now().getMonthValue(), rand.randIntWithRange(LocalDate.now().getDayOfMonth() - 3,28))
+                    LocalDate.of(2023, LocalDate.now().getMonthValue(), rand.randIntWithRange(LocalDate.now().getDayOfMonth() - 3,28)),
+                    rand.randIntWithRange(0, 100)
             );
 
         Log.d("DatabaseSeeder", String.format("Assignment Seeder : Successfully seeded %d assignments", i));
