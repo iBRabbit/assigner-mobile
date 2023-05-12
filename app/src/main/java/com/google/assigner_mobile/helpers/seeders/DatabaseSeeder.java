@@ -126,7 +126,7 @@ public class DatabaseSeeder {
         groupDB = new GroupHelper(context);
         groupDB.open();
 
-        Vector <Group> groupVector = groupDB.getAllData();
+        Vector <Group> groupVector = groupDB.getAllData(); // problem : Bugged, tapi gapapa karena hanya untuk debug
         int     groupIdLowerBound = groupVector.get(0).getId(),
                 groupIdUpperBound = groupVector.get(groupVector.size() - 1).getId() ;
 

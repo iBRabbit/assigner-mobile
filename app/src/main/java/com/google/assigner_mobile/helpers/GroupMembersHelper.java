@@ -56,6 +56,13 @@ public class GroupMembersHelper {
 
         try {
             db.delete(TABLE_NAME, whereClause, whereArgs);
+
+            // Hapus semua assignment yang dimiliki member
+            AssignmentHelper ah = new AssignmentHelper(context);
+            ah.open();
+            ah.deleteAllAssignmentForUserInGroup(userId, groupId);
+            ah.close();
+
         } catch (Exception e) {
             Log.e("GroupMembersHelper", String.format("Delete failed: %s", e.getMessage()));;
             return false;

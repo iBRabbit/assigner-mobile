@@ -11,7 +11,6 @@ import com.google.assigner_mobile.models.Assignment;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Vector;
 
 public class AssignmentHelper {
@@ -57,7 +56,7 @@ public class AssignmentHelper {
 
             db.insert(TABLE_NAME, null, values);
         } catch (Exception e) {
-            Log.e("AssignmentHelper", String.format("Insert failed: %s", e.getMessage()));;
+            Log.e("AssignmentHelper", String.format("Insert failed: %s", e.getMessage()));
             return false;
         }
 
@@ -72,10 +71,9 @@ public class AssignmentHelper {
      * @return boolean apakah data berhasil dihapus atau tidak
      */
     public boolean delete(int id) {
-        SQLiteDatabase db = dbh.getWritableDatabase();
-
         try {
-            db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+            dbh.execQuery(String.format("DELETE FROM %s WHERE id = %s", TABLE_NAME, id));
+            Log.i("AssignmentHelper", String.format("Data deleted: %s", id));
         } catch (Exception e) {
             Log.e("AssignmentHelper", String.format("Delete failed: %s", e.getMessage()));
             return false;
@@ -83,6 +81,22 @@ public class AssignmentHelper {
 
         Log.d("AssignmentHelper", String.format("Data deleted: %s", id));
 
+        return true;
+    }
+
+    /**
+     * Fungsi untuk menghapus semua data assignment dari user tertentu di group tertentu
+     * @param userId ID dari user yang akan dihapus assignmentnya
+     * @param groupId  ID dari group yang akan dihapus assignmentnya
+     * @return boolean apakah data berhasil dihapus atau tidak
+     */
+    public boolean deleteAllAssignmentForUserInGroup(int userId, int groupId) {
+        try {
+            dbh.execQuery(String.format("DELETE FROM %s WHERE user_id = %s AND group_id = %s", TABLE_NAME, userId, groupId));
+        } catch (Exception e) {
+            return false;
+        }
+        
         return true;
     }
 

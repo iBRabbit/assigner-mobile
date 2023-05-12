@@ -72,12 +72,16 @@ public class GroupHelper {
     public Boolean delete(Integer id) {
 
         try {
+            // Hapus dari groups
             dbh.execQuery(String.format("DELETE FROM %s WHERE id = %s", TABLE_NAME, id));
-
-            Log.i("GroupHelper", String.format("Data deleted: %s", id));
 
             // Hapus dari group_members juga
             dbh.execQuery(String.format("DELETE FROM group_members WHERE group_id = %s", id));
+
+            // Hapus semua assignment yang ada di group
+            dbh.execQuery(String.format("DELETE FROM assignments WHERE group_id = %s", id));
+
+            Log.i("GroupHelper", String.format("Data deleted: %s", id));
 
         } catch (Exception e) {
             Log.e("GroupHelper", String.format("Delete failed: %s", e.getMessage()));;
