@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.assigner_mobile.R;
 import com.google.assigner_mobile.functions.AuthFunction;
 import com.google.assigner_mobile.helpers.GroupHelper;
+import com.google.assigner_mobile.helpers.GroupMembersHelper;
 import com.google.assigner_mobile.helpers.UserHelper;
 import com.google.assigner_mobile.models.Group;
 import com.google.assigner_mobile.models.User;
@@ -134,6 +135,19 @@ public class GroupDetailsActivity extends AppCompatActivity implements View.OnCl
 
         if(view == groupDetailsLeaveGroupButton) {
             // TODO: Leave Group
+            GroupMembersHelper gmh = new GroupMembersHelper(this);
+            gmh.open();
+
+            if(gmh.removeMember(group.getId(), auth.getAuthID(this))) {
+                Log.i("GroupDetailsActivity", String.format("User %s Left Group %s", auth.getAuthID(this), group.getName()));
+                Toast.makeText(this, String.format("You left group %s", group.getName()), Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Log.i("GroupDetailsActivity", String.format("User %s Failed to Leave Group %s", auth.getAuthID(this), group.getName()));
+                Toast.makeText(this,String.format("You failed to left group %s", group.getName()), Toast.LENGTH_SHORT).show();
+            }
+
+            gmh.close();
         }
 
         if(view == groupDetailsViewGroupButton) {

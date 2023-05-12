@@ -49,7 +49,7 @@ public class GroupMembersHelper {
         return true;
     }
 
-    public Boolean delete(Integer groupId, Integer userId) {
+    public Boolean removeMember(Integer groupId, Integer userId) {
         SQLiteDatabase db = dbh.getWritableDatabase();
         String whereClause = "group_id = ? AND user_id = ?";
         String[] whereArgs = new String[] { groupId.toString(), userId.toString() };
