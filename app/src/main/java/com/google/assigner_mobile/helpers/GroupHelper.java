@@ -70,9 +70,15 @@ public class GroupHelper {
      * @return boolean apakah data berhasil dihapus atau tidak
      */
     public Boolean delete(Integer id) {
-        SQLiteDatabase db = dbh.getWritableDatabase();
+
         try {
-            db.delete(TABLE_NAME, "id = ?", new String[]{id.toString()});
+            dbh.execQuery(String.format("DELETE FROM %s WHERE id = %s", TABLE_NAME, id));
+
+            Log.i("GroupHelper", String.format("Data deleted: %s", id));
+
+            // Hapus dari group_members juga
+            dbh.execQuery(String.format("DELETE FROM group_members WHERE group_id = %s", id));
+
         } catch (Exception e) {
             Log.e("GroupHelper", String.format("Delete failed: %s", e.getMessage()));;
             return false;

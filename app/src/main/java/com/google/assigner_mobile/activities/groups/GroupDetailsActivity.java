@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.assigner_mobile.R;
 import com.google.assigner_mobile.functions.AuthFunction;
@@ -84,7 +85,15 @@ public class GroupDetailsActivity extends AppCompatActivity implements View.OnCl
         }
 
         if(view == groupDetailsDeleteGroupButton) {
-            // TODO: Delete Group (Only Admin)
+            // TODO: Delete Group
+            if(groupDB.delete(group.getId())) {
+                Log.i("GroupDetailsActivity", String.format("Group %s Deleted", group.getName()));
+                Toast.makeText(this, String.format("Group %s Deleted", group.getName()), Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Log.i("GroupDetailsActivity", String.format("Group %s Failed to Delete", group.getName()));
+                Toast.makeText(this, String.format("Group %s Failed to Delete", group.getName()), Toast.LENGTH_SHORT).show();
+            }
         }
 
         if(view == groupDetailsLeaveGroupButton) {
