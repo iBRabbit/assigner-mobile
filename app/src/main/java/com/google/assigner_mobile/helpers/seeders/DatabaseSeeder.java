@@ -8,6 +8,7 @@ import com.google.assigner_mobile.helpers.AssignmentHelper;
 import com.google.assigner_mobile.helpers.DatabaseHelper;
 import com.google.assigner_mobile.helpers.GroupHelper;
 import com.google.assigner_mobile.helpers.GroupMembersHelper;
+import com.google.assigner_mobile.helpers.NotificationHelper;
 import com.google.assigner_mobile.helpers.UserHelper;
 import com.google.assigner_mobile.models.Assignment;
 import com.google.assigner_mobile.models.Group;
@@ -180,6 +181,30 @@ public class DatabaseSeeder {
        Log.d("DatabaseSeeder", String.format("User Seeder : Successfully seeded %d users", i));
     }
 
+    public void seedNotifications(Context context, int seedSize) throws SQLException {
+        NotificationHelper notifDB = new NotificationHelper(context);
+
+        notifDB.open();
+
+        UserHelper userDB = new UserHelper(context);
+        userDB.open();
+        Integer userIdLowerBound = userDB.getAllData().get(0).getId(),
+                userIdUpperBound = userDB.getAllData().get(userDB.getAllData().size() - 1).getId();
+        userDB.close();
+
+        for(int i = 0; i < seedSize; i++) {
+            notifDB.insert(
+                    rand.randIntWithRange(userIdLowerBound, userIdUpperBound),
+                    "Notification " + i,
+                    "This is notification " + i,
+                    rand.randIntWithRange(0,3),
+                    LocalDate.now()
+            );
+        }
+
+        notifDB.close();
+        Log.d("DatabaseSeeder", String.format("Notification Seeder : Successfully seeded %d notifications", seedSize));
+    }
 
     public void seedFresh(Context context) throws SQLException{
         DatabaseHelper dbh = new DatabaseHelper(context);
@@ -187,6 +212,7 @@ public class DatabaseSeeder {
         dbh.execQuery("DELETE FROM assignments");
         dbh.execQuery("DELETE FROM group_members");
         dbh.execQuery("DELETE FROM groups");
+        dbh.execQuery("DELETE FROM notifications");
 
         seed(context);
     }
@@ -200,5 +226,6 @@ public class DatabaseSeeder {
         seedGroups(context, 10);
         seedGroupMembers(context, 20);
         seedAssignments(context, 20);
+        seedNotifications(context, 20);
     }
 }

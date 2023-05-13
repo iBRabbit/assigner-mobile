@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notificationCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:orientation="vertical"
+        android:overScrollMode="never"
+        android:background="@drawable/border"
+        >
+
+        <TextView
+            android:id="@+id/notificationTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Notifications Title"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="10dp"
+            />
+
+        <TextView
+            android:id="@+id/notificationCreatedAt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textSize="15sp"
+            android:padding="10dp"
+            android:textStyle="italic"
+            />
+
+        <TextView
+            android:id="@+id/notificationMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Message here"
+            android:textSize="15sp"
+            android:padding="10dp"
+            />
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="1"
+            android:padding="10dp"
+            android:layout_gravity="center_horizontal"
+            >
+
+            <Button
+                android:id="@+id/notificationAcceptButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:backgroundTint="@color/success"
+                android:text="Accept"
+                android:textColor="@color/white"
+                android:layout_gravity="start"
+                android:layout_marginEnd="30dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/notificationDeclineButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:backgroundTint="@color/danger"
+                android:text="Decline"
+                android:textColor="@color/white"
+                android:layout_gravity="end"
+                android:textStyle="bold" />
+
+
+        </GridLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
