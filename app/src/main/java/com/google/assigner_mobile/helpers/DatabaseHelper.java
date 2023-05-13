@@ -41,6 +41,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(query);
         Log.i("DatabaseHelper", "Table group_members created");
 
+        query = "CREATE TABLE IF NOT EXISTS invitations (id INTEGER PRIMARY KEY AUTOINCREMENT, group_id INTEGER, user_id INTEGER)";
+        sqLiteDatabase.execSQL(query);
+        Log.i("DatabaseHelper", "Table group_invitations created");
+
     }
 
     @Override
@@ -61,6 +65,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         query = "DROP TABLE IF EXISTS group_members";
         sqLiteDatabase.execSQL(query);
         Log.i("DatabaseHelper", "Table group_members dropped");
+
+        query = "DROP TABLE IF EXISTS invitations";
+        sqLiteDatabase.execSQL(query);
+        Log.i("DatabaseHelper", "Table invitations dropped");
 
         onCreate(sqLiteDatabase);
     }
