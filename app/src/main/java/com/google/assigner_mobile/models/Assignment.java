@@ -1,6 +1,7 @@
 package com.google.assigner_mobile.models;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 
 import com.google.assigner_mobile.functions.DateFunction;
@@ -130,6 +131,17 @@ public class Assignment {
             return Color.parseColor("#FFC107"); // Yellow
         else
             return Color.parseColor("#198754"); // Green
+
+    }
+
+    public ColorStateList getProgressColor(Integer progress) {
+
+        if(progress < 30)
+            return ColorStateList.valueOf(Color.parseColor("#DC3545")); // Red
+        else if(progress < 70)
+            return ColorStateList.valueOf(Color.parseColor("#FFC107")); // Yellow
+        else
+            return ColorStateList.valueOf(Color.parseColor("#198754")); // Green
 
     }
 

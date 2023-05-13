@@ -53,6 +53,8 @@ public class AssignmentDetailsActivity extends AppCompatActivity implements View
         assignmentDeadlineTextView.setText(String.format("Deadline : %s", asg.getDeadline()));
         assignmentProgressBar.setProgress(asg.getProgress());
 
+        assignmentProgressBar.setProgressTintList(asg.getProgressColor(asg.getProgress()));
+
         assignmentUpdateProgressButton.setOnClickListener(this);
 
         asgDB.close();
@@ -90,6 +92,7 @@ public class AssignmentDetailsActivity extends AppCompatActivity implements View
 
                         asgDB.update(getIntent().getIntExtra("assignmentId", 0),"progress", progress);
                         assignmentProgressBar.setProgress(progress);
+                        assignmentProgressBar.setProgressTintList(asgDB.getAssignmentById(getIntent().getIntExtra("assignmentId", 0)).getProgressColor(progress));
 
                         Toast.makeText(this, "Progress updated", Toast.LENGTH_SHORT).show();
 

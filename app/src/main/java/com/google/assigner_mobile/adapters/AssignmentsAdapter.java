@@ -75,6 +75,17 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
                         .get(position)
                         .getProgress()
         );
+        // set progress bar color
+        holder.assignmentProgressBar.setProgressTintList(
+                assignmentVector
+                        .get(position)
+                        .getProgressColor(
+                                assignmentVector
+                                        .get(position)
+                                        .getProgress()
+                        )
+        );
+
 
         holder.assignmentDeadlineTextView.setText(
                 assignmentVector
