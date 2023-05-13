@@ -78,6 +78,10 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<GroupMembersAdapte
             holder.groupMembersAssignButton.setVisibility(View.GONE);
         }
 
+        if(groupMembersVector.get(position).getId() == authID)
+            holder.groupMembersRemoveButton.setVisibility(View.GONE);
+
+
         holder.groupMembersAssignButton.setOnClickListener(view -> {
 
             EditText assignmentNameEditText = new EditText(context);
@@ -127,18 +131,12 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<GroupMembersAdapte
             });
 
             holder.groupMembersRemoveButton.setOnClickListener(view -> {
-                // TODO : Remove Member if Owner
-                if(group.getOwnerId().compareTo(authID) != 0) {
-
-                    Toast.makeText(context, "You are not the owner of this group.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
                 GroupMembersHelper gmh = new GroupMembersHelper(context);
 
                 new AlertDialog.Builder(context).setTitle("Remove Member")
                         .setMessage("Are you sure you want to remove this member?")
                         .setPositiveButton("Remove", (dialogInterface, i) -> {
+
                             gmh.open();
                             gmh.removeMember(group.getId(),groupMembersVector.get(position).getId());
                             gmh.close();

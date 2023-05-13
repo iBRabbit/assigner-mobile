@@ -34,11 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         auth.setAuthID(this, -1);
 
-        try {
-            databaseSeeder.seedFresh(this);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        databaseSeeder.seedUsers(this, 3);
     }
     @Override
     public void onClick(View view) {

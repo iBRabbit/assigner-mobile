@@ -88,8 +88,8 @@ public class CreateGroupActivity extends AppCompatActivity implements View.OnCli
             return false;
         }
 
-        if (groupDescription.length() > 20) {
-            createGroupDescriptionEditText.setError("Group description must be less than 20 characters");
+        if (groupDescription.length() > 300) {
+            createGroupDescriptionEditText.setError("Group description must be less than 300 characters");
             createGroupDescriptionEditText.requestFocus();
             return false;
         }
