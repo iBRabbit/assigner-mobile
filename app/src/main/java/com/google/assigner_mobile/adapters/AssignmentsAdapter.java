@@ -1,6 +1,7 @@
 package com.google.assigner_mobile.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.assigner_mobile.R;
+import com.google.assigner_mobile.activities.assignments.AssignmentDetailsActivity;
 import com.google.assigner_mobile.helpers.GroupHelper;
 import com.google.assigner_mobile.models.Assignment;
 import com.google.assigner_mobile.models.Group;
@@ -84,7 +86,11 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
                         )
         );
 
-
+        holder.assignmentCardView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AssignmentDetailsActivity.class);
+            intent.putExtra("assignmentId", assignmentVector.get(position).getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override

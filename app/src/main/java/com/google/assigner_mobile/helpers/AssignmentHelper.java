@@ -191,6 +191,7 @@ public class AssignmentHelper {
      */
     public Assignment getAssignmentById(int id) {
         Cursor cursor = dbh.getData("id", id, TABLE_NAME);
+        cursor.moveToFirst();
 
         int     idColumnIndex = cursor.getColumnIndex("id"),
                 userIdColumnIndex = cursor.getColumnIndex("user_id"),
@@ -198,11 +199,12 @@ public class AssignmentHelper {
                 nameColumnIndex = cursor.getColumnIndex("name"),
                 descriptionColumnIndex = cursor.getColumnIndex("description"),
                 createdAtColumnIndex = cursor.getColumnIndex("created_at_epoch_day"),
-                progressColumnIndex = cursor.getColumnIndex("progress"),
-                deadlineColumnIndex = cursor.getColumnIndex("deadline_epoch_day");
+                deadlineColumnIndex = cursor.getColumnIndex("deadline_epoch_day"),
+                progressColumnIndex = cursor.getColumnIndex("progress");
+
 
         LocalDate
-                createdAt = LocalDate.ofEpochDay(cursor.getLong(createdAtColumnIndex)) ,
+                createdAt = LocalDate.ofEpochDay(cursor.getLong(createdAtColumnIndex)),
                 deadline = LocalDate.ofEpochDay(cursor.getLong(deadlineColumnIndex));
 
         return new Assignment(
@@ -234,7 +236,7 @@ public class AssignmentHelper {
                     progressColumnIndex = cursor.getColumnIndex("progress");
 
             LocalDate
-                    createdAt = LocalDate.ofEpochDay(cursor.getLong(createdAtColumnIndex)) ,
+                    createdAt = LocalDate.ofEpochDay(cursor.getLong(createdAtColumnIndex)),
                     deadline = LocalDate.ofEpochDay(cursor.getLong(deadlineColumnIndex));
 
             assignmentVector.add(

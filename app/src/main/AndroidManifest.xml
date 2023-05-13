@@ -12,6 +12,9 @@
         android:theme="@style/Theme.Assignermobile"
         tools:targetApi="31">
         <activity
+            android:name=".activities.assignments.AssignmentDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.groups.GroupMembersActivity"
             android:exported="false" />
         <activity
