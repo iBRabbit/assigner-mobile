@@ -2,6 +2,7 @@ package com.google.assigner_mobile.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,11 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.assigner_mobile.R;
+import com.google.assigner_mobile.activities.groups.GroupMembersActivity;
 import com.google.assigner_mobile.functions.AuthFunction;
 import com.google.assigner_mobile.helpers.AssignmentHelper;
 import com.google.assigner_mobile.helpers.GroupHelper;
+import com.google.assigner_mobile.helpers.GroupMembersHelper;
 import com.google.assigner_mobile.helpers.UserHelper;
 import com.google.assigner_mobile.models.Group;
 import com.google.assigner_mobile.models.User;
@@ -64,6 +67,17 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<GroupMembersAdapte
         userDB.open();
 
         holder.groupMembersNameTextView.setText(groupMembersVector.get(position).getUsername());
+
+        Integer authID = new AuthFunction().getAuthID(context);
+
+        if(authID.equals(group.getOwnerId())) {
+            holder.groupMembersRemoveButton.setVisibility(View.VISIBLE);
+            holder.groupMembersAssignButton.setVisibility(View.VISIBLE);
+        } else {
+            holder.groupMembersRemoveButton.setVisibility(View.GONE);
+            holder.groupMembersAssignButton.setVisibility(View.GONE);
+        }
+
         holder.groupMembersAssignButton.setOnClickListener(view -> {
 
             EditText assignmentNameEditText = new EditText(context);
@@ -114,6 +128,29 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<GroupMembersAdapte
 
             holder.groupMembersRemoveButton.setOnClickListener(view -> {
                 // TODO : Remove Member if Owner
+                if(group.getOwnerId().compareTo(authID) != 0) {
+
+                    Toast.makeText(context, "You are not the owner of this group.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                GroupMembersHelper gmh = new GroupMembersHelper(context);
+
+                new AlertDialog.Builder(context).setTitle("Remove Member")
+                        .setMessage("Are you sure you want to remove this member?")
+                        .setPositiveButton("Remove", (dialogInterface, i) -> {
+                            gmh.open();
+                            gmh.removeMember(group.getId(),groupMembersVector.get(position).getId());
+                            gmh.close();
+
+                            Toast.makeText(context, String.format("Member %s removed.", groupMembersVector.get(position).getUsername()), Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(context, GroupMembersActivity.class);
+                            intent.putExtra("groupId", group.getId());
+                            context.startActivity(intent);
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
             });
 
     userDB.close();
@@ -140,6 +177,7 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<GroupMembersAdapte
             groupMembersAssignButton = itemView.findViewById(R.id.groupMembersAssignButton);
 
             groupMembersCardView = itemView.findViewById(R.id.groupMembersCardView);
+
         }
     }
 }

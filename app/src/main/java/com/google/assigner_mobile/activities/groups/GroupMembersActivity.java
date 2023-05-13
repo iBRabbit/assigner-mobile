@@ -5,12 +5,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.assigner_mobile.R;
 import com.google.assigner_mobile.adapters.GroupMembersAdapter;
 import com.google.assigner_mobile.functions.AuthFunction;
+import com.google.assigner_mobile.helpers.GroupHelper;
 import com.google.assigner_mobile.helpers.GroupMembersHelper;
 import com.google.assigner_mobile.helpers.UserHelper;
+import com.google.assigner_mobile.models.Group;
 import com.google.assigner_mobile.models.User;
 
 import java.util.Vector;
