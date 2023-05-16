@@ -108,13 +108,13 @@ public class GroupMembersActivity extends AppCompatActivity implements View.OnCl
                             return;
                         }
 
-                        invitationDB.invite(groupId, targetUser.getId());
+                        Integer invitationId = invitationDB.invite(groupId, targetUser.getId());
                         invitationDB.close();
 
                         NotificationHelper notificationDB = new NotificationHelper(this);
                         notificationDB.open();
 
-                        notificationDB.insert(targetUser.getId(), "Group Invite",  String.format("You have been invited to join %s", group.getId()), AppNotification.TYPE_INVITATION, LocalDate.now());
+                        notificationDB.insert(targetUser.getId(), "Group Invite",  String.format("You have been invited to join %s", group.getId()), AppNotification.TYPE_INVITATION, LocalDate.now(), invitationId);
                         notificationDB.close();
 
 

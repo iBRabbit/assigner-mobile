@@ -23,7 +23,9 @@ import com.google.assigner_mobile.functions.AuthFunction;
 import com.google.assigner_mobile.helpers.AssignmentHelper;
 import com.google.assigner_mobile.helpers.GroupHelper;
 import com.google.assigner_mobile.helpers.GroupMembersHelper;
+import com.google.assigner_mobile.helpers.NotificationHelper;
 import com.google.assigner_mobile.helpers.UserHelper;
+import com.google.assigner_mobile.models.AppNotification;
 import com.google.assigner_mobile.models.Group;
 import com.google.assigner_mobile.models.User;
 
@@ -125,6 +127,12 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<GroupMembersAdapte
                         asgDB.close();
 
                         Toast.makeText(context, String.format("Assignment %s created.", assignmentName), Toast.LENGTH_SHORT).show();
+
+                        NotificationHelper notifDB = new NotificationHelper(context);
+                        notifDB.open();
+                        notifDB.insert(groupMembersVector.get(position).getId(), "New Assignment", String.format("You have been assigned to %s on group %s", assignmentName, this.group.getName()), AppNotification.TYPE_ASSIGNMENT, assignmentCreatedAt);
+                        notifDB.close();
+
                         })
                     .setNegativeButton("Cancel", null)
                     .show();

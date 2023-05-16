@@ -187,7 +187,6 @@ public class GroupHelper {
         GroupMembersHelper gmh = new GroupMembersHelper(context);
         gmh.open();
         Vector <Group> groupVector2 = gmh.getAllGroupsByUserId(id);
-        
         // Gabungkan kedua vector//
 
         groupVector.addAll(groupVector2);

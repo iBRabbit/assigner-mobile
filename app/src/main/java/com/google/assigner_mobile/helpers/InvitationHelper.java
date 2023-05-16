@@ -29,22 +29,42 @@ public class InvitationHelper {
         Log.i("InvitationHelper", "Database closed");
     }
 
-    public boolean invite(int groupId, int userId) {
+    public Integer invite(int groupId, int userId) {
         SQLiteDatabase db = dbh.getWritableDatabase();
         ContentValues values = new ContentValues();
+        long id = -1;
 
         try {
             values.put("group_id", groupId);
             values.put("user_id", userId);
 
-            db.insert(TABLE_NAME, null, values);
+           id = db.insert(TABLE_NAME, null, values);
         } catch (Exception e) {
             Log.e("InvitationHelper", "Error inserting invitation");
-            return false;
+            return -1;
         }
 
         Log.d("InvitationHelper", "Invitation inserted");
-        return true;
+        return (int) id;
+    }
+
+    public Invitation getInvitation(int id) {
+        Cursor cursor = dbh.getDataWithQuery(String.format("SELECT * FROM %s WHERE id = %d", TABLE_NAME, id));
+
+        if (cursor.getCount() == 0)
+            return null;
+
+        cursor.moveToFirst();
+
+        int idIndex = cursor.getColumnIndex("id"),
+            groupIdIndex = cursor.getColumnIndex("group_id"),
+            userIdIndex = cursor.getColumnIndex("user_id");
+
+        int _id = cursor.getInt(idIndex),
+            group_id = cursor.getInt(groupIdIndex),
+            user_id = cursor.getInt(userIdIndex);
+
+        return new Invitation(_id, group_id, user_id);
     }
 
     public Invitation getInvitation(int groupId, int userId) {
@@ -72,6 +92,18 @@ public class InvitationHelper {
 
             db.delete(TABLE_NAME, "user_id = ?", new String[]{String.valueOf(userId)});
 
+        } catch (Exception e) {
+            Log.e("InvitationHelper", "Error deleting invitation");
+            return false;
+        }
+
+        Log.d("InvitationHelper", "Invitation deleted");
+        return true;
+    }
+
+    public boolean delete(int id) {
+        try{
+            dbh.execQuery(String.format("DELETE FROM %s WHERE id = %d", TABLE_NAME, id));
         } catch (Exception e) {
             Log.e("InvitationHelper", "Error deleting invitation");
             return false;

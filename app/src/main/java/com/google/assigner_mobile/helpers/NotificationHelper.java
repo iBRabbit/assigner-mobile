@@ -63,6 +63,29 @@ public class NotificationHelper {
         return true;
     }
 
+    public Boolean insert(Integer userId, String title, String message, Integer type, LocalDate createdAtEpochDay, Integer invitation_id) {
+        SQLiteDatabase db = dbh.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        try {
+            values.put("user_id", userId);
+            values.put("title", title);
+            values.put("message", message);
+            values.put("type", type);
+            values.put("created_at_epoch_day", createdAtEpochDay.toEpochDay());
+            values.put("invitation_id", invitation_id);
+
+            db.insert(TABLE_NAME, null, values);
+        } catch (Exception e) {
+            Log.e("NotificationHelper", String.format("Insert failed: %s", e.getMessage()));
+            ;
+            return false;
+        }
+
+        return true;
+    }
+
+
     /**
      * Fungsi untuk menghapus data notifikasi dari database
      * @param id ID dari notifikasi yang akan dihapus
@@ -95,6 +118,7 @@ public class NotificationHelper {
                 userIdColumnIndex = cursor.getColumnIndex("user_id"),
                 messageColumnIndex = cursor.getColumnIndex("message"),
                 typeColumnIndex = cursor.getColumnIndex("type"),
+                    invitationIdColumnIndex = cursor.getColumnIndex("invitation_id"),
                 createdAtEpochDayColumnIndex = cursor.getColumnIndex("created_at_epoch_day");
 
             LocalDate createdAt = LocalDate.ofEpochDay(cursor.getLong(createdAtEpochDayColumnIndex));
@@ -106,7 +130,8 @@ public class NotificationHelper {
                             cursor.getString(titleColumnIndex),
                             cursor.getString(messageColumnIndex),
                             cursor.getInt(typeColumnIndex),
-                            createdAt
+                            createdAt,
+                            cursor.getInt(invitationIdColumnIndex)
                     )
             );
 

@@ -45,7 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(query);
         Log.i("DatabaseHelper", "Table group_invitations created");
 
-        query = "CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT, message TEXT, type INT, created_at_epoch_day INT)";
+        query = "CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT, message TEXT, type INT, invitation_id INT, created_at_epoch_day INT)";
         sqLiteDatabase.execSQL(query);
         Log.i("DatabaseHelper", "Table notifications created");
 

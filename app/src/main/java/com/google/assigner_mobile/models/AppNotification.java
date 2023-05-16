@@ -9,6 +9,7 @@ public class AppNotification {
     private String title;
     private String message;
     private Integer type;
+    private Integer invitationId;
     private LocalDate createdAt;
 
     public final static int TYPE_INVITATION = 1;
@@ -22,6 +23,25 @@ public class AppNotification {
         this.message = message;
         this.type = type;
         this.createdAt = createdAt;
+        this.invitationId = null;
+    }
+
+    public AppNotification(int id, int user_id, String title, String message, Integer type, LocalDate createdAt, Integer invitationId) {
+        this.id = id;
+        this.user_id = user_id;
+        this.title = title;
+        this.message = message;
+        this.type = type;
+        this.createdAt = createdAt;
+        this.invitationId = invitationId;
+    }
+
+    public Integer getInvitationId() {
+        return invitationId;
+    }
+
+    public void setInvitationId(Integer invitationId) {
+        this.invitationId = invitationId;
     }
 
     public int getId() {
