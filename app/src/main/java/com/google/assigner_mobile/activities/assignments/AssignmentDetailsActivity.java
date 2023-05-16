@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.assigner_mobile.R;
+import com.google.assigner_mobile.functions.AuthFunction;
 import com.google.assigner_mobile.helpers.AssignmentHelper;
 import com.google.assigner_mobile.models.Assignment;
 
@@ -54,6 +55,12 @@ public class AssignmentDetailsActivity extends AppCompatActivity implements View
         assignmentProgressBar.setProgress(asg.getProgress());
 
         assignmentProgressBar.setProgressTintList(asg.getProgressColor(asg.getProgress()));
+
+        // Cek apakah user adalah owner dari assignment
+        int authID = new AuthFunction().getAuthID(this);
+
+        if(!asg.getUserId().equals(authID))
+            assignmentUpdateProgressButton.setVisibility(View.GONE);
 
         assignmentUpdateProgressButton.setOnClickListener(this);
 

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.assigner_mobile.R;
+import com.google.assigner_mobile.activities.assignments.AssignmentListActivity;
 import com.google.assigner_mobile.functions.AuthFunction;
 import com.google.assigner_mobile.helpers.AssignmentHelper;
 import com.google.assigner_mobile.helpers.GroupHelper;
@@ -39,6 +40,7 @@ public class GroupDetailsActivity extends AppCompatActivity implements View.OnCl
     Button      groupDetailsEditGroupButton,
                 groupDetailsViewGroupButton,
                 groupDetailsLeaveGroupButton,
+                groupDetailsViewAssignmentsButton,
                 groupDetailsDeleteGroupButton;
 
     AuthFunction auth = new AuthFunction();
@@ -159,6 +161,12 @@ public class GroupDetailsActivity extends AppCompatActivity implements View.OnCl
 
             startActivity(intent);
         }
+
+        if(view == groupDetailsViewAssignmentsButton) {
+            Intent intent = new Intent(this, AssignmentListActivity.class);
+            intent.putExtra("groupId", group.getId());
+            startActivity(intent);
+        }
     }
 
     public void init() {
@@ -169,10 +177,12 @@ public class GroupDetailsActivity extends AppCompatActivity implements View.OnCl
         groupDetailsViewGroupButton = findViewById(R.id.groupDetailsViewMembersButton);
         groupDetailsGroupOwnerTextView = findViewById(R.id.groupDetailsGroupOwnerTextView);
         groupDetailsDeleteGroupButton = findViewById(R.id.groupDetailsDeleteGroupButton);
+        groupDetailsViewAssignmentsButton = findViewById(R.id.groupDetailsViewAssignmentsButton);
 
         groupDetailsEditGroupButton.setOnClickListener(this);
         groupDetailsLeaveGroupButton.setOnClickListener(this);
         groupDetailsViewGroupButton.setOnClickListener(this);
         groupDetailsDeleteGroupButton.setOnClickListener(this);
+        groupDetailsViewAssignmentsButton.setOnClickListener(this);
     }
 }
