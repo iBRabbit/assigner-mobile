@@ -81,6 +81,9 @@ public class GroupHelper {
             // Hapus semua assignment yang ada di group
             dbh.execQuery(String.format("DELETE FROM assignments WHERE group_id = %s", id));
 
+            // Hapus semua invite yang ada di group
+            dbh.execQuery(String.format("DELETE FROM invitations WHERE group_id = %s", id));
+
             Log.i("GroupHelper", String.format("Data deleted: %s", id));
 
         } catch (Exception e) {
@@ -184,8 +187,7 @@ public class GroupHelper {
         GroupMembersHelper gmh = new GroupMembersHelper(context);
         gmh.open();
         Vector <Group> groupVector2 = gmh.getAllGroupsByUserId(id);
-
-
+        
         // Gabungkan kedua vector//
 
         groupVector.addAll(groupVector2);

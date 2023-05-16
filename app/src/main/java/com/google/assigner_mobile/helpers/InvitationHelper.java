@@ -2,9 +2,12 @@ package com.google.assigner_mobile.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import com.google.assigner_mobile.models.Invitation;
 
 public class InvitationHelper {
     private static final String TABLE_NAME = "invitations";
@@ -42,6 +45,25 @@ public class InvitationHelper {
 
         Log.d("InvitationHelper", "Invitation inserted");
         return true;
+    }
+
+    public Invitation getInvitation(int groupId, int userId) {
+        Cursor cursor = dbh.getDataWithQuery(String.format("SELECT * FROM %s WHERE group_id = %d AND user_id = %d", TABLE_NAME, groupId, userId));
+
+        if (cursor.getCount() == 0)
+            return null;
+
+        cursor.moveToFirst();
+
+        int idIndex = cursor.getColumnIndex("id"),
+            groupIdIndex = cursor.getColumnIndex("group_id"),
+            userIdIndex = cursor.getColumnIndex("user_id");
+
+        int id = cursor.getInt(idIndex),
+            group_id = cursor.getInt(groupIdIndex),
+            user_id = cursor.getInt(userIdIndex);
+
+        return new Invitation(id, group_id, user_id);
     }
 
     public boolean deleteInviteByUserId(int userId) {

@@ -46,6 +46,8 @@ public class NotificationsFragment extends Fragment {
 
         notifDB.open();
         notificationsVector = notifDB.getAllNotificationsByUserId(auth.getAuthID(new GlobalFunction().safeGetContext(getContext())));
+
+
         Toast.makeText(getContext(), "Notifications: " + notificationsVector.size(), Toast.LENGTH_SHORT).show();
         notifDB.close();
 
